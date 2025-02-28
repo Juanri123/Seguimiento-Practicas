@@ -1,8 +1,8 @@
 import React from "react";
 import "../Styles/styles.css";
-import logoColombia from "../assets/colombia-potencia-de-vida-logo (1).png";
+import logoColombia from "../assets/colombia-potencia-de-vida-logo.png";
 import userIcon from "../assets/foto-persona.png";
-import senaLogo from "../assets/sena-logo (1).png";
+import senaLogo from "../assets/sena-logo-s.png";
 
 function Navbar(){
     return( 
