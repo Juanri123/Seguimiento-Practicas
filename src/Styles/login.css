@@ -1,0 +1,139 @@
+/**/
+* {
+    margin: 0;
+    padding: 0;
+}
+/*Este estilo es de las imagenes que tengan una etiqueta de lista*/
+li {
+    list-style: none;
+}
+/*Este estilo es el grid de la parte del header*/
+.contenedor{
+    display: grid;
+    grid-template-columns: repeat(1fr,8);
+    grid-template-rows: repeat(1fr, 9);
+    width: 100vw;
+}
+/*Esto especifica cuantas columnas va a ocupar el contenido del header*/
+.header {
+    grid-column: 1/8;
+}
+/*Este es el estilo del primer encabezado*/
+#cbz1 {
+    height: 50px;
+    max-width: 100%;
+    background: #3366CC;
+}
+/*Este es el estilo del encabezado que contiene los primeros logos*/
+#cbz2{
+    grid-column: 2/7;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.5rem;
+}
+/*Este primer logo es el de Colombia Potencia de Vida*/
+#logo1 {
+    height: 3rem;
+    padding: auto;
+    float: left;
+}
+/*Este segundo logo es el de el sena en la parte superior derecha de la pantalla*/
+#logo2 {
+    height: 3.2rem;
+    padding: auto;
+}
+/*A partir de aca esta el estilo de el espacio en donde va el nombre*/
+.contenedor2 {
+    display: grid;
+    grid-template-columns: repeat(1fr,8);
+}
+#cbz3 {
+    height: 60px;
+    max-width: 100%;
+    background: #04324d;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    margin-top: 0.5rem;
+    grid-column: 1/8;
+}
+/*Estilos del parrafo en donde esta el nombre del sistema*/
+#namepage {
+    padding: auto;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    font-family: "Platypi", serif;
+    font: bolder;
+    font-size: 20px;
+    color: #fff;
+}
+/*Estilos de todo el contenedor de login*/
+.contenedor3 {
+    width: 100vw;
+    justify-content: center;
+    display: flex;
+}
+/*Estilos del contenedor de login*/
+#login {
+    margin: auto;
+    margin-top: 100px;
+    background: #cbcbcb;
+    display: flex;
+    border-radius: 2.563rem;
+    width: 15.625rem;
+    padding: 2rem;
+    height: fit-content;
+}
+/*Estilos del parrafo de Ingreso Seguimiento*/
+.ingresotext p {
+    text-decoration: underline;
+    margin-bottom: 25px;
+}
+/*Estilos del parrafo Tipo de Cuenta*/
+.login-label {
+    color: #39a900;
+    font-size: 1.3rem;
+    font-family: sans-serif ;
+}
+/*Estilos del recuadro de opciones de opciones*/
+.login-select {
+    margin-top: 10px;
+    width: 249px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    padding: 3px;
+}
+/*Estilos del input de numero de documento*/
+.numeroidentidad {
+    margin-top: 10px;
+    width: 235px;
+    height: 32px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    padding: 7px;
+}
+/*Estilos del input de contraseña*/
+.password {
+    margin-top: 10px;
+    width: 235px;
+    height: 32px;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 7px;
+}
+/*Estilos de el boton de iniciar sesión*/
+.login-boton {
+    margin-top: 25px;
+    margin-left: 42px;
+    width: 170px;
+    padding: 0.859rem;
+    background: #39a900;
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: bolder;
+}

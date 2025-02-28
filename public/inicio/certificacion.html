@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificación</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+
+    <nav>
+        <div class="menu-icon">
+            <img src="./css/img/colombia-potencia-de-vida-logo (1).png" alt="Menú" width="30">
+        </div>
+        <div class="nav-buttons2">
+            <input type="text" placeholder="Buscar...">
+            <img src="./css/img/foto-persona.png" alt="Usuario" width="30">
+            <img src="./css/img/sena-logo (1).png" alt="Inicio" width="30">
+        </div>
+    </nav>
+
+    <div class="container3">
+        <div class="section">
+            <h2>Certificaciones</h2>
+            <div id="certificaciones-list">
+                <div class="certificacion-item">
+                    <span>Certificación 1</span>
+                    <button class="ver-btn">Ver</button>
+                </div>
+            </div>
+            <button id="add-cert-btn" class="primary-btn">Solicitar certificación</button>
+        </div>
+
+        <div class="section">
+            <h2>Solicitud de certificación</h2>
+            <input type="text" id="tipo-cert" placeholder="Tipo de certificación">
+            <input type="text" id="motivo-cert" placeholder="Motivo de la solicitud">
+            <input type="file" id="archivo-cert">
+            <button id="submit-cert" class="primary-btn">Solicitar</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-cert-btn').addEventListener('click', function () {
+            const certList = document.getElementById('certificaciones-list');
+            const newCert = document.createElement('div');
+            newCert.classList.add('certificacion-item');
+            newCert.innerHTML = `
+                <span>Certificación Nueva</span>
+                <button class="ver-btn">Ver</button>
+            `;
+            certList.appendChild(newCert);
+        });
+
+        document.getElementById('submit-cert').addEventListener('click', function () {
+            const tipoCert = document.getElementById('tipo-cert').value;
+            const motivoCert = document.getElementById('motivo-cert').value;
+            const archivoCert = document.getElementById('archivo-cert').files[0];
+
+            if (tipoCert && motivoCert && archivoCert) {
+                alert(`Solicitud enviada:\nTipo: ${tipoCert}\nMotivo: ${motivoCert}\nArchivo: ${archivoCert.name}`);
+                document.getElementById('tipo-cert').value = '';
+                document.getElementById('motivo-cert').value = '';
+                document.getElementById('archivo-cert').value = '';
+            } else {
+                alert("Por favor, complete todos los campos y seleccione un archivo.");
+            }
+        });
+    </script>
+</body>
+
+</html>
