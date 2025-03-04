@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesion</title>
+    <title>Inicio de Sesión</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,57 +13,58 @@
 </head>
 
 <body>
-    <div class="contenedor">
-        <header class="header">
-            <div class="container">
-                <div id="cbz1">
+    <div id="root">
+        <div class="contenedor">
+            <header class="header">
+                <div class="container">
+                    <div id="cbz1">
+                    </div>
                 </div>
+            </header>
+            <div id="cbz2">
+                <ul>
+                    <li><img src="./img/colombia-potencia-de-vida-logo (1).png" id="logo1"></li>
+                    <li><img src="./img/sena-logo (1).png" id="logo2"></li>
+                </ul>
             </div>
-        </header>
-        <div id="cbz2">
-            <ul>
-                <li><img src="./img/colombia-potencia-de-vida-logo (1).png" id="logo1"></li>
-                <li><img src="./img/sena-logo (1).png" id="logo2"></li>
-            </ul>
         </div>
-        
-    </div>
-    <div class="contenedor2">
-        <div id="cbz3">
-            <p id="namepage">Seguimiento Etapa Practica</p>
-        </div>
-        <div class="contenedor3">
-            <div id="login">
-                <div class="ingresotext">
-                    <p>Ingreso
-                        <br>
-                        Seguimiento
-                    </p>
-                    <div class="login-container">
-                        <form style="transition: opacity 0.2s ease-in-out 0s, transform 0.2s ease-in-out 0s; transform: scale(1);" class="">
-                            <label class="login-label">Tipo de Cuenta</label>
-                            <select class="login-select" name="typeDocument">
-                                <option >Seleccione su tipo de cuenta</option>
-                                <option >Instructor</option>
-                                <option >Aprendiz</option>
-                            </select>
-                            <label class="login-label">Número de Documento</label>
-                            <input type="text" class="numeroidentidad" title="Número de documento" placeholder="Ingrese su documento" pattern="[0-9]+" required>
-                            <label class="login-label">Contraseña</label>
-                            <input type="password" class="password" title="Contraseña" placeholder="Ingrese su Contraseña" required autocomplete="nop">
-                            <a class="new-password" href="">Olvidé mi contraseña</a>
+
+        <div class="contenedor2">
+            <div id="cbz3">
+                <p id="namepage">Seguimiento Etapa Practica</p>
+            </div>
+            <div class="contenedor3">
+                <div id="login">
+                    <div class="ingresotext">
+                        <p>Ingreso
                             <br>
-                            <a class="new-password" href="">Mi cuenta esta inactiva o bloqueada</a>
-                            <btton type="submit"  name="login-boton" class="login-boton"><a href="./inicio/index.html">Iniciar Sesión </a></btton>
-                        </form>
+                            Seguimiento
+                        </p>
+                        <div class="login-container">
+                            <form class="">
+                                <label class="login-label">Tipo de Cuenta</label>
+                                <select class="login-select" name="typeDocument">
+                                    <option>Seleccione su tipo de cuenta</option>
+                                    <option>Instructor</option>
+                                    <option>Aprendiz</option>
+                                </select>
+                                <label class="login-label">Número de Documento</label>
+                                <input type="text" class="numeroidentidad" title="Número de documento"
+                                    placeholder="Ingrese su documento" pattern="[0-9]+" required>
+                                <label class="login-label">Contraseña</label>
+                                <input type="password" class="password" title="Contraseña"
+                                    placeholder="Ingrese su Contraseña" required autocomplete="off">
+                                <a class="new-password" href="">Olvidé mi contraseña</a>
+                                <br>
+                                <a class="new-password" href="">Mi cuenta está inactiva o bloqueada</a>
+                                <button type="submit" name="login-boton" class="login-boton">Iniciar Sesión</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </body>
 
 </html>
