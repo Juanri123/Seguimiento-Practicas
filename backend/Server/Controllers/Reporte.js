@@ -57,15 +57,29 @@ exports.verReportePorId = async (req, res) => {
 
 exports.verReportes = async (req, res) => {
 	try {
-		const reportes = await Reporte.findAll()
-		if (reportes.length === 0) {
-			return res.status(404).json({ message: 'No existen reportes' })
+		const pagina = parseInt(req.query.pagina) || 1
+		const limite = parseInt(req.query.limite) || 6
+		const offset = (pagina - 1) *limite
+
+		const {count, rows} = await Reporte.findAndCountAll({
+			limit: limite,
+			offset: offset,
+		})
+
+		if (count === 0) {
+			return res.status(404).json({ mensaje: 'No existen reportes por el momento.' })
 		}
-		res.status(200).json({ reportes })
+
+		res.status(200).json({
+			reportes: rows,
+			totalPaginas: Math.ceil(count / limite),
+			paginaActual: pagina,
+		})
 	} catch (error) {
 		res.status(500).json({ error: error.message })
 	}
 }
+
 
 exports.eliminarReporte = async (req, res) => {
 	try {
