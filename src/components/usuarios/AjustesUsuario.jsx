@@ -123,18 +123,17 @@ const AjustesUsuario = () => {
 							onChange={handleChange}
 						/>
 
-						{/* <label className='register-label' htmlFor='contraseña'>
-					Nueva Contraseña
-					</label>
-					<input
-					className='register-input'
-					type='password'
-					id='contraseña'
-					name='contraseña'
-					value={formData.contraseña}
-					onChange={handleChange}
-					placeholder='••••••••'
-					/> */}
+						<label className='label register-label' htmlFor='contraseña'>
+							Nueva Contraseña
+						</label>
+						<input
+							className='input register-input'
+							type='password'
+							id='contraseña'
+							name='contraseña'
+							onChange={handleChange}
+							placeholder='••••••••'
+						/>
 
 						<button type='submit' className='button register-button'>
 							Guardar Cambios

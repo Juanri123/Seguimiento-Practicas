@@ -49,7 +49,7 @@ const Content = () => {
 			<section className='info-section'>
 				<img src='../assets/img/user.png' alt='Profile' />
 				<div>
-					<h2>Información del Aprendiz</h2>
+					<h2>Información del {usuario?.rol}</h2>
 					<p>{usuario?.nombres}</p>
 					<p>{usuario?.apellidos}</p>
 					<p>{usuario?.correo}</p>
