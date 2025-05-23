@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {useState, useEffect} from "react";
+import {Link, useNavigate} from "react-router-dom";
 import Swal from "sweetalert2";
-import { API_URL } from "../../api/globalVars";
+import {API_URL} from "../../api/globalVars";
 
 const LoginForm = () => {
   const [typeAccount, setTypeAccount] = useState("");
@@ -10,6 +10,16 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (error) {
+      const timeout = setTimeout(() => {
+        setError(null);
+      }, 2000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,11 +37,11 @@ const LoginForm = () => {
       const res = await axios.post(url, {
         tipoCuenta: typeAccount,
         documento: document,
-        password,
+        password
       });
 
       const usuario = res.data.usuario;
-      
+
       localStorage.setItem("rol", usuario.rol);
       localStorage.setItem("usuarioId", usuario.id);
       localStorage.setItem(
@@ -39,7 +49,7 @@ const LoginForm = () => {
         JSON.stringify({
           tipoCuenta: typeAccount,
           documento: document,
-          password,
+          password
         })
       );
 
@@ -49,12 +59,12 @@ const LoginForm = () => {
         title: "Inicio exitoso",
         showConfirmButton: false,
         timer: 1200,
-        toast: true,
+        toast: true
       });
 
       navigate("/inicio");
     } catch (err) {
-      console.error("error login", err.response);
+      console.error("error login", err);
       const message = err.response?.data?.message || "Error al iniciar sesión";
       setError(message);
     }
@@ -63,7 +73,7 @@ const LoginForm = () => {
   return (
     <div className="login-section">
       <div className="login">
-        <h2 id="login-title">Ingreso Seguimiento</h2>
+        {/* <h3 id="login-title">Ingreso Seguimiento</h3> */}
 
         <form className="login-form" onSubmit={handleSubmit}>
           <label className="label login-label" htmlFor="login-select">
@@ -75,8 +85,7 @@ const LoginForm = () => {
             name="typeAccount"
             value={typeAccount}
             onChange={(e) => setTypeAccount(e.target.value)}
-            required
-          >
+            required>
             <option disabled value="">
               Seleccione su tipo de cuenta
             </option>
@@ -84,7 +93,9 @@ const LoginForm = () => {
             <option value="aprendiz">Aprendiz</option>
           </select>
 
-          <label className="label login-label" htmlFor="login-document">Número de Documento</label>
+          <label className="label login-label" htmlFor="login-document">
+            Número de Documento
+          </label>
           <input
             className="input login-input"
             id="login-document"
@@ -97,7 +108,9 @@ const LoginForm = () => {
             required
           />
 
-          <label className="label login-label" htmlFor="login-password">Contraseña</label>
+          <label className="label login-label" htmlFor="login-password">
+            Contraseña
+          </label>
           <input
             type="password"
             className="input login-input"
@@ -109,15 +122,29 @@ const LoginForm = () => {
             required
           />
 
-          {error && <p className="error-message">{error}</p>}{/* QUITAR ESTO */}
+          {error && (
+            <p className="error-message" role="alert">
+              <span role="img" aria-label="error">
+                ⚠️
+              </span>
+              {error}
+              <button
+                onClick={() => setError(null)}
+                className="close-button"
+                aria-label="cerrar alerta">
+                ✖
+              </button>
+            </p>
+          )}
 
           <div className="recovery-block">
             <Link to="/forgot-password">Olvidé mi contraseña</Link>
             <Link to="/registro">Registrarme</Link>
           </div>
 
-          <button type="submit" className="button login-button">Iniciar Sesión</button>
-
+          <button type="submit" className="button login-button">
+            Iniciar Sesión
+          </button>
         </form>
       </div>
     </div>
