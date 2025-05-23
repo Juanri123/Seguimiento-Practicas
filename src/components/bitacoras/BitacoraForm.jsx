@@ -43,17 +43,12 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!bitacora.aprendiz_id || !bitacora.fecha || !bitacora.archivo) {
+    if (!bitacora.aprendiz_id || !bitacora.fecha || !bitacora.archivo)
       return setError("Todos los campos son necesarios.");
-    }
-
-    if (bitacora.fecha !== today) {
+    if (bitacora.fecha !== today)
       return setError("Sólo puede subir una bitácora en la fecha actual.");
-    }
-
-    if (bitacoras.length >= 6) {
-      return setError("La cantidad máxima de bitáoras es 6.");
-    }
+    if (bitacoras.length >= 6)
+      return setError("La cantidad máxima de bitácoras es 6.");
 
     try {
       const formData = new FormData();
@@ -87,9 +82,14 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
         window.dispatchEvent(new Event("notificacionesActualizadas"));
       } else {
         console.log("Error desconocido al subir la bitácora");
+        setError("Error desconocido al subir la bitácora.");
       }
     } catch (error) {
       console.error("Error al subir la bitácora:", error);
+      const errorMessage =
+        error.response?.data?.message ||
+        "Ocurrió un error al subir la bitácora.";
+      setError(errorMessage);
     }
   };
 

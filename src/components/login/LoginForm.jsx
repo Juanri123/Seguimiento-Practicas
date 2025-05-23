@@ -1,8 +1,8 @@
 import axios from "axios";
-import {useState, useEffect} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import {API_URL} from "../../api/globalVars";
+import { API_URL } from "../../api/globalVars";
 
 const LoginForm = () => {
   const [typeAccount, setTypeAccount] = useState("");
@@ -23,21 +23,20 @@ const LoginForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!typeAccount) return setError("Debe seleccionar un tipo de cuenta.");
     if (!/^\d+$/.test(document))
       return setError("El documento debe ser numérico.");
     if (password.length < 6)
-      return setError("La contraseña debe tener al menos 6 caracteres.");
-
-    setError("");
+      return setError("La contraseña debe tener al menos 6 carácteres.");
 
     try {
       const url = `${API_URL}/api/auth/login`;
       const res = await axios.post(url, {
         tipoCuenta: typeAccount,
         documento: document,
-        password
+        password,
       });
 
       const usuario = res.data.usuario;
@@ -49,7 +48,7 @@ const LoginForm = () => {
         JSON.stringify({
           tipoCuenta: typeAccount,
           documento: document,
-          password
+          password,
         })
       );
 
@@ -59,7 +58,7 @@ const LoginForm = () => {
         title: "Inicio exitoso",
         showConfirmButton: false,
         timer: 1200,
-        toast: true
+        toast: true,
       });
 
       navigate("/inicio");
@@ -73,8 +72,6 @@ const LoginForm = () => {
   return (
     <div className="login-section">
       <div className="login">
-        {/* <h3 id="login-title">Ingreso Seguimiento</h3> */}
-
         <form className="login-form" onSubmit={handleSubmit}>
           <label className="label login-label" htmlFor="login-select">
             Tipo de Cuenta

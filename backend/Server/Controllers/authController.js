@@ -113,9 +113,6 @@ const login = async (req, res) => {
     if (!validarPassword) {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
-    console.log(password, usuario.contraseña, validarPassword);
-
-    console.log("JWT_SECRET:", process.env.JWT_SECRET);
 
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol }, // puedes agregar más info si necesitas
