@@ -274,6 +274,7 @@ body {
 	padding: 6px 12px;
 	border-radius: 8px;
 	cursor: pointer;
+	margin-right: 10px;
 }
 
 .cerrar-popup {
@@ -288,6 +289,34 @@ body {
 }
 .cerrar-popup:hover {
 	background-color: #9ea2a3;
+}
+.pestania-selector {
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 0.5rem;
+	gap: 1rem;
+}
+
+.pestania-selector button {
+	padding: 0.4rem 1rem;
+	border: none;
+	cursor: pointer;
+	border-radius: 6px;
+}
+
+.pestania-selector button.leidas {
+	background-color: #4caf50;
+	color: white;
+}
+
+.pestania-selector button.pendientes {
+	background-color: #c8c8c8;
+	color: white;
+}
+
+.pestania-selector button.archivadas {
+	background-color: #56baf8;
+	color: white;
 }
 
 /* Animación de aparición */
