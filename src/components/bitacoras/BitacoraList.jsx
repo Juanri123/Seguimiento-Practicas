@@ -15,7 +15,6 @@ const BitacoraList = () => {
   const urlBitacoras = `${API_URL}/api/bitacoras/verBitacoras`;
   const urlAceptar = `${API_URL}/api/bitacoras/aceptar`;
   const urlRechazar = `${API_URL}/api/bitacoras/rechazar`;
-  const urlUploads = `${API_URL}/api/uploads`;
 
   const obtenerBitacoras = useCallback(async () => {
     try {
@@ -23,9 +22,7 @@ const BitacoraList = () => {
       setBitacoras(res.data);
     } catch (error) {
       console.error("Error al obtener las bitácoras:", error.response || error);
-      setError(
-        "Error al obtener bitácoras. Consulta la consola para más detalles."
-      );
+      setError("Error al obtener bitácoras. Consulta la consola para más detalles.");
     }
   }, []);
 
@@ -61,9 +58,8 @@ const BitacoraList = () => {
 
       const idAprendiz = bitacoraRechazar.aprendiz_id;
       const claveNotificaciones = `notificaciones_${idAprendiz}`;
+      const notificaciones = JSON.parse(localStorage.getItem(claveNotificaciones)) || [];
 
-      const notificaciones =
-        JSON.parse(localStorage.getItem(claveNotificaciones)) || [];
       const nuevaNotificacion = {
         id: Date.now(),
         mensaje: `Tu bitácora fue rechazada. Motivo: ${motivoRechazo}`,
@@ -81,10 +77,7 @@ const BitacoraList = () => {
       setBitacoraRechazar(null);
       obtenerBitacoras();
     } catch (error) {
-      console.error(
-        "Error al rechazar bitácora:",
-        error.response?.data || error
-      );
+      console.error("Error al rechazar bitácora:", error.response?.data || error);
       setMostrarMotivoPopup(false);
       setMotivoRechazo("");
       setBitacoraRechazar(null);
@@ -92,7 +85,8 @@ const BitacoraList = () => {
   };
 
   const renderArchivo = (archivo) => {
-    const fileUrl = `${urlUploads}/${archivo}`;
+    if (!archivo) return <p>Sin archivo</p>;
+    const fileUrl = `http://localhost:3000/uploads/${archivo}`;
     return (
       <a href={fileUrl} target="_blank" rel="noopener noreferrer">
         Ver archivo
@@ -100,7 +94,6 @@ const BitacoraList = () => {
     );
   };
 
-  // ✅ Aquí se filtra correctamente por aprendiz
   const bitacorasFiltradas =
     rol === "aprendiz"
       ? bitacoras.filter((b) => String(b.aprendiz_id) === String(idUsuario))
@@ -117,18 +110,14 @@ const BitacoraList = () => {
             <p>
               <strong>Bitácora {index + 1}</strong>
             </p>
-            {b.archivo ? renderArchivo(b.archivo) : <p>Sin archivo</p>}
+            {renderArchivo(b.archivo)}
             <p>Fecha: {b.fecha}</p>
             {rol === "instructor" && (
               <div className="bitacora-buttons">
-                <button
-                  className="button accept"
-                  onClick={() => handleAceptar(b.id)}>
+                <button className="button accept" onClick={() => handleAceptar(b.id)}>
                   ✔️
                 </button>
-                <button
-                  className="button reject"
-                  onClick={() => handleRechazar(b)}>
+                <button className="button reject" onClick={() => handleRechazar(b)}>
                   ❌
                 </button>
               </div>
@@ -140,10 +129,7 @@ const BitacoraList = () => {
       )}
 
       {rol === "aprendiz" && (
-        <BitacoraForm
-          bitacoras={bitacorasFiltradas}
-          onAddBitacora={obtenerBitacoras}
-        />
+        <BitacoraForm bitacoras={bitacorasFiltradas} onAddBitacora={obtenerBitacoras} />
       )}
 
       {mostrarMotivoPopup && (
@@ -160,9 +146,7 @@ const BitacoraList = () => {
               <button onClick={confirmarRechazo} className="popup-confirm">
                 Confirmar
               </button>
-              <button
-                onClick={() => setMostrarMotivoPopup(false)}
-                className="popup-cancel">
+              <button onClick={() => setMostrarMotivoPopup(false)} className="popup-cancel">
                 Cancelar
               </button>
             </div>

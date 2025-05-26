@@ -19,7 +19,6 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
       const timeout = setTimeout(() => {
         setError(null);
       }, 2000);
-
       return () => clearTimeout(timeout);
     }
   }, [error]);
@@ -27,9 +26,7 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
   useEffect(() => {
     const rolGuardado = localStorage.getItem("rol");
     const idGuardado = localStorage.getItem("usuarioId");
-    if (rolGuardado) {
-      setRol(rolGuardado.toLowerCase());
-    }
+    if (rolGuardado) setRol(rolGuardado.toLowerCase());
     if (idGuardado) {
       setBitacora((prev) => ({ ...prev, aprendiz_id: idGuardado }));
     }
@@ -77,15 +74,11 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
           archivo: null,
         });
         onAddBitacora();
-
-        // Notificar al Navbar
         window.dispatchEvent(new Event("notificacionesActualizadas"));
       } else {
-        console.log("Error desconocido al subir la bitácora");
         setError("Error desconocido al subir la bitácora.");
       }
     } catch (error) {
-      console.error("Error al subir la bitácora:", error);
       const errorMessage =
         error.response?.data?.message ||
         "Ocurrió un error al subir la bitácora.";
@@ -132,10 +125,7 @@ const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
 
           {error && (
             <p className="error-message" role="alert">
-              <span role="img" aria-label="error">
-                ⚠️
-              </span>
-              {error}
+              <span role="img" aria-label="error">⚠️</span> {error}
               <button
                 onClick={() => setError(null)}
                 className="close-button"
