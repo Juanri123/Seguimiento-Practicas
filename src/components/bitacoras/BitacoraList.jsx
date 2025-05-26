@@ -2,6 +2,8 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { API_URL } from "../../api/globalVars";
 import BitacoraForm from "./BitacoraForm";
+import {ReactComponent as ArrowLeft} from "../../icons/ArrowLeft.svg";
+import {ReactComponent as ArrowRight} from "../../icons/ArrowRight.svg";
 
 const BitacoraList = () => {
   const [bitacoras, setBitacoras] = useState([]);
@@ -130,7 +132,7 @@ const BitacoraList = () => {
           onClick={() => setPagina((p) => Math.max(p - 1, 1))}
           disabled={pagina <= 1}
         >
-          Anterior
+          <ArrowLeft />
         </button>
         <span>
           Página {pagina} de {totalPaginas}
@@ -140,7 +142,7 @@ const BitacoraList = () => {
           onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
           disabled={pagina >= totalPaginas}
         >
-          Siguiente
+          <ArrowRight />
         </button>
       </div>
 

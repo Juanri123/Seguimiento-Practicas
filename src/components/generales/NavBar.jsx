@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { API_URL } from '../../api/globalVars'
+import {ReactComponent as BellIcon} from '../../icons/Bell.svg'
 
 const Navbar = () => {
 	const [notificaciones, setNotificaciones] = useState([])
@@ -92,17 +93,9 @@ const Navbar = () => {
 				<div
 					className='navbar-notifications'
 					onClick={() => setMostrarPopup(!mostrarPopup)}>
-					<svg
-						viewBox='0 0 24 24'
-						width='28'
-						height='28'
-						className='navbar-icon'
-						style={{ cursor: 'pointer' }}>
-						<path fill='none' d='M0 0h24v24H0z' />
-						<path d='M12 2C8.13 2 5 5.13 5 8v4c0 1.1-.9 2-2 2v2h14v-2c-1.1 0-2-.9-2-2V8c0-2.87-3.13-6-7-6zm0 16c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm-3-2v-1h6v1H9z' />
-					</svg>
+					<BellIcon className='navbar-icon' />
 					{notificacionesPendientes.length > 0 && (
-						<span className='notification-count'>
+						<span style={{cursor: 'default'}} className='notification-count'>
 							{notificacionesPendientes.length}
 						</span>
 					)}
