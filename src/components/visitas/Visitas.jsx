@@ -152,7 +152,6 @@ function Visitas() {
 			<Sidebar />
 			<div className="content">
 				<div className="visits-section">
-					<h2 className="visit-list__title">Visitas</h2>
 					<div className="visit-list">
 						{visitas.length === 0 ? (
 							<p>No hay visitas registradas</p>

@@ -96,10 +96,9 @@ const Reportes = () => {
       <NavBar />
       <Sidebar />
       <div className="content">
-        <h3 className="report-list__title">Reportes</h3>
 
         {reportes.length === 0 ? (
-          <p>No existen reportes</p>
+          <p>No hay reportes registrados.</p>
         ) : (
           reportes.map((reporte) => (
             <div className="report-list__item" key={reporte.id}>

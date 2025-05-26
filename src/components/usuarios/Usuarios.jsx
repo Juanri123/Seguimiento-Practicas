@@ -38,7 +38,6 @@ const Usuarios = () => {
       <Navbar />
       <Sidebar />
       <div className="content">
-        <h3>Usuarios</h3>
         {usuarios.length > 0 ? (
           usuarios.map((user) => (
             <div className="report-list__item" key={user.id}>

@@ -123,7 +123,6 @@ const Fichas = () => {
 			<Sidebar />
 			<div className='content'>
 				<div className='seccion-fichas'>
-					<h3>Listado de Fichas</h3>
 					{fichas?.length > 0 ? (
 						fichas.map((ficha) => (
 							<div key={ficha.codigo} className='fichas-item'>

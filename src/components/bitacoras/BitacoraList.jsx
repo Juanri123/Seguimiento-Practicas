@@ -108,7 +108,6 @@ const BitacoraList = () => {
 
   return (
     <section className="bitacora-list">
-      <h3 className="bitacora-list__title">Bitácoras</h3>
       {error && <p className="error-message">{error}</p>}
 
       {bitacorasFiltradas.length > 0 ? (
