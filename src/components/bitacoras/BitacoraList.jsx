@@ -8,23 +8,24 @@ const BitacoraList = () => {
   const [error, setError] = useState("");
   const [rol, setRol] = useState("");
   const [idUsuario, setIdUsuario] = useState("");
+  const [pagina, setPagina] = useState(1);
+  const [totalPaginas, setTotalPaginas] = useState(1);
   const [mostrarMotivoPopup, setMostrarMotivoPopup] = useState(false);
   const [motivoRechazo, setMotivoRechazo] = useState("");
   const [bitacoraRechazar, setBitacoraRechazar] = useState(null);
 
-  const urlBitacoras = `${API_URL}/api/bitacoras/verBitacoras`;
-  const urlAceptar = `${API_URL}/api/bitacoras/aceptar`;
-  const urlRechazar = `${API_URL}/api/bitacoras/rechazar`;
-
   const obtenerBitacoras = useCallback(async () => {
     try {
-      const res = await axios.get(urlBitacoras);
-      setBitacoras(res.data);
+      const res = await axios.get(`${API_URL}/api/bitacoras/verBitacoras`, {
+        params: { pagina, limite: 6 },
+      });
+      setBitacoras(res.data.bitacoras);
+      setTotalPaginas(res.data.totalPaginas);
     } catch (error) {
       console.error("Error al obtener las bitácoras:", error.response || error);
       setError("Error al obtener bitácoras. Consulta la consola para más detalles.");
     }
-  }, []);
+  }, [pagina]);
 
   useEffect(() => {
     const rolGuardado = localStorage.getItem("rol");
@@ -36,7 +37,7 @@ const BitacoraList = () => {
 
   const handleAceptar = async (id) => {
     try {
-      await axios.put(`${urlAceptar}/${id}`);
+      await axios.put(`${API_URL}/api/bitacoras/aceptar/${id}`);
       obtenerBitacoras();
     } catch (error) {
       console.error("Error al aceptar bitácora:", error);
@@ -51,7 +52,7 @@ const BitacoraList = () => {
   const confirmarRechazo = async () => {
     try {
       await axios.put(
-        `${urlRechazar}/${bitacoraRechazar.id}`,
+        `${API_URL}/api/bitacoras/rechazar/${bitacoraRechazar.id}`,
         { motivo: motivoRechazo },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -94,20 +95,15 @@ const BitacoraList = () => {
     );
   };
 
-  const bitacorasFiltradas =
-    rol === "aprendiz"
-      ? bitacoras.filter((b) => String(b.aprendiz_id) === String(idUsuario))
-      : bitacoras;
-
   return (
     <section className="bitacora-list">
       {error && <p className="error-message">{error}</p>}
 
-      {bitacorasFiltradas.length > 0 ? (
-        bitacorasFiltradas.map((b, index) => (
+      {bitacoras.length > 0 ? (
+        bitacoras.map((b, index) => (
           <div className={`bitacora-item estado${b.estado}`} key={b.id}>
             <p>
-              <strong>Bitácora {index + 1}</strong>
+              <strong>Bitácora {index + 1 + (pagina - 1) * 6}</strong>
             </p>
             {renderArchivo(b.archivo)}
             <p>Fecha: {b.fecha}</p>
@@ -127,8 +123,29 @@ const BitacoraList = () => {
         <p>No hay bitácoras</p>
       )}
 
+      {/* Paginación */}
+      <div className="pagination-block">
+        <button
+          className="pagination-button"
+          onClick={() => setPagina((p) => Math.max(p - 1, 1))}
+          disabled={pagina <= 1}
+        >
+          Anterior
+        </button>
+        <span>
+          Página {pagina} de {totalPaginas}
+        </span>
+        <button
+          className="pagination-button"
+          onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
+          disabled={pagina >= totalPaginas}
+        >
+          Siguiente
+        </button>
+      </div>
+
       {rol === "aprendiz" && (
-        <BitacoraForm bitacoras={bitacorasFiltradas} onAddBitacora={obtenerBitacoras} />
+        <BitacoraForm bitacoras={bitacoras} onAddBitacora={obtenerBitacoras} />
       )}
 
       {mostrarMotivoPopup && (
