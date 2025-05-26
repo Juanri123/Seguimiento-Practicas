@@ -9,14 +9,14 @@ const ReportForm = ({ onAddReporte, onClose }) => {
     motivo: '',
     id_usuario: '' // Aquí guardamos el id del instructor
   })
-
-  const [rol, setRol] = useState('');
+  const [archivo, setArchivo] = useState(null)
+  const [rol, setRol] = useState('')
 
   useEffect(() => {
     const rolGuardado = localStorage.getItem('rol')
     const idGuardado = localStorage.getItem('usuarioId')
     if (rolGuardado) {
-      setRol(rolGuardado.toLowerCase());
+      setRol(rolGuardado.toLowerCase())
     }
     if (idGuardado) {
       setReporte((prev) => ({ ...prev, id_usuario: idGuardado }))
@@ -26,6 +26,10 @@ const ReportForm = ({ onAddReporte, onClose }) => {
   const handleChange = (e) => {
     const { name, value } = e.target
     setReporte({ ...reporte, [name]: value })
+  }
+
+  const handleArchivoChange = (e) => {
+    setArchivo(e.target.files[0])
   }
 
   const uploadReport = async () => {
@@ -42,11 +46,23 @@ const ReportForm = ({ onAddReporte, onClose }) => {
     }
 
     try {
+      const formData = new FormData()
+      formData.append('nombre', nombre)
+      formData.append('motivo', motivo)
+      formData.append('id_usuario', id_usuario)
+      if (archivo) {
+        formData.append('archivo', archivo)
+      }
+
       const url = `${API_URL}/api/reportes`
-      const { data } = await axios.post(url, reporte)
+      const { data } = await axios.post(url, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+
       if (data.nuevoReporte) {
         onAddReporte(data.nuevoReporte)
         setReporte({ nombre: '', motivo: '', id_usuario }) // Mantener id_usuario
+        setArchivo(null)
         onClose()
 
         await Swal.fire({
@@ -61,6 +77,13 @@ const ReportForm = ({ onAddReporte, onClose }) => {
       }
     } catch (error) {
       console.error('Error al subir el reporte:', error.response?.data || error.message)
+      await Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Hubo un problema al subir el reporte.',
+        toast: true,
+        position: 'bottom-left'
+      })
     }
   }
 
@@ -70,7 +93,7 @@ const ReportForm = ({ onAddReporte, onClose }) => {
   }
 
   return (
-    <form className='report-form' onSubmit={handleSubmit}>
+    <form className='report-form' onSubmit={handleSubmit} encType='multipart/form-data'>
       <h2 className='report-form__title'>Agregar Reporte</h2>
       <input
         type='text'
@@ -87,6 +110,13 @@ const ReportForm = ({ onAddReporte, onClose }) => {
         className='input report-input'
         value={reporte.motivo}
         onChange={handleChange}
+      />
+      <input
+        type='file'
+        name='archivo'
+        accept='.pdf,.jpg,.jpeg,.png'
+        onChange={handleArchivoChange}
+        className='input report-input'
       />
       <button type='submit' className='button register-button'>
         Subir Reporte

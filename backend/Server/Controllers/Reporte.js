@@ -5,6 +5,7 @@ const Usuario = require('../Models/Usuario');
 exports.crearReporte = async (req, res) => {
   try {
     const { id_usuario, nombre, motivo } = req.body
+	const archivo = req.file?.filename;
     const currentDate = new Date().toISOString().split('T')[0]
 
     // Validar que el instructor exista
@@ -13,13 +14,18 @@ exports.crearReporte = async (req, res) => {
       return res.status(404).json({ error: 'Instructor no encontrado' })
     }
 
+	if (!archivo) {
+		return res.status(404).json({ error: 'Falta campos obligatorios'})
+	}
+
     // Crear el reporte
     const nuevoReporte = await Reporte.create({
       id_usuario,
       fecha: currentDate,
       nombre,
       motivo,
-      estado: 'pendiente'
+      estado: 'pendiente',
+	  archivo
     })
 
     // Buscar todos los aprendices

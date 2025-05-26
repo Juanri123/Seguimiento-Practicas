@@ -616,8 +616,8 @@ body {
   text-wrap: balance;
   justify-content: space-between;
   background-color: #f8f8f8;
-  padding: 24px;
-  column-gap: 10px;
+  padding: 15px;
+  column-gap: 100px;
   border-radius: 8px;
   display: grid;
   margin-bottom: 15px;
