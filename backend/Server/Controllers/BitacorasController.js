@@ -5,14 +5,30 @@ const Usuario = require('../Models/Usuario');
 
 // Obtener todas las bitácoras
 exports.getAllBitacoras = async (req, res) => {
-    try {
-        const bitacora = await Bitacoras.findAll();
-        res.status(200).json(bitacora);
-    } catch (error) {
-        console.error('Error en getAllBitacoras:', error); // 🔍 imprime el error real en consola
-        res.status(500).json({ error: error.message }); // muestra el mensaje exacto en la respuesta
-    }
+  try {
+    const pagina = parseInt(req.query.pagina) || 1;
+    const limite = parseInt(req.query.limite) || 6;
+    const offset = (pagina - 1) * limite;
+
+    const { count, rows } = await Bitacoras.findAndCountAll({
+      offset,
+      limit: limite,
+      order: [['fecha', 'DESC']], // puedes cambiar el orden si lo deseas
+    });
+
+    const totalPaginas = Math.ceil(count / limite);
+
+    res.status(200).json({
+      bitacoras: rows,
+      totalPaginas,
+    });
+  } catch (error) {
+    console.error('Error en getAllBitacoras:', error);
+    res.status(500).json({ error: error.message });
+  }
 };
+
+
 // Obtener una bitácora por ID
 exports.getBitacoraById = async (req, res) => {
     try {
@@ -36,7 +52,7 @@ exports.createBitacora = async (req, res) => {
       return res.status(400).json({ error: 'Faltan campos obligatorios' });
     }
 
-    // Crear la bitácora
+    // Crear la bitácora  
     const nuevaBitacora = await Bitacoras.create({
       aprendiz_id,
       fecha,
@@ -114,33 +130,35 @@ exports.aceptarBitacora = async (req, res) => {
 };
 
 exports.rechazarBitacora = async (req, res) => {
-    const { id } = req.params;
+  const { id } = req.params;
   const { motivo } = req.body;
 
   try {
-    // Obtener la visita
     const bitacora = await Bitacoras.findByPk(id);
     if (!bitacora) return res.status(404).json({ message: "Bitacora no encontrada" });
 
-    // Actualizar estado de la visita a 'rechazada' y guardar el motivo
     bitacora.estado = "rechazada";
     bitacora.motivo = motivo;
     await bitacora.save();
 
-    // Formatear la fecha
-    const fechaFormateada = bitacora.fecha.toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    // Corregido: convertir a Date antes de formatear
+    const fecha = new Date(bitacora.fecha);
+    const fechaFormateada = fecha.toISOString().split("T")[0];
 
-    // Crear la notificación para el aprendiz
     const mensaje = `Tu bitacora del ${fechaFormateada} fue rechazada. Motivo: ${motivo}`;
-    const id_usuario = bitacora.aprendiz_id;  // Obtener el ID del aprendiz asociado a la visita
+    const id_usuario = bitacora.aprendiz_id;
 
     const nuevaNotificacion = await Notificacion.create({
       mensaje,
       id_usuario,
-      estado: "pendiente", // Estado inicial    
+      estado: "pendiente",
     });
 
-    res.status(200).json({ message: "Bitacora rechazada con motivo y notificación creada", data: nuevaNotificacion });
+    res.status(200).json({
+      message: "Bitacora rechazada con motivo y notificación creada",
+      data: nuevaNotificacion
+    });
+
   } catch (error) {
     console.error("Error al rechazar bitacora:", error);
     res.status(500).json({
@@ -151,6 +169,7 @@ exports.rechazarBitacora = async (req, res) => {
     });
   }
 };
+
 // Eliminar una bitácora
 exports.deleteBitacora = async (req, res) => {
     try {
