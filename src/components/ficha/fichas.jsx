@@ -4,6 +4,8 @@ import Swal from 'sweetalert2'
 import Sidebar from '../generales/Sidebar'
 import Navbar from '../generales/NavBar'
 import { API_URL } from '../../api/globalVars'
+import { ReactComponent as ArrowLeft } from '../../icons/ArrowLeft.svg'
+import { ReactComponent as ArrowRight } from '../../icons/ArrowRight.svg'
 
 const Fichas = () => {
 	const [mostrarFormulario, setMostrarFormulario] = useState(false)
@@ -22,6 +24,8 @@ const Fichas = () => {
 	})
 
 	const [fichas, setFichas] = useState([])
+	const [pagina, setPagina] = useState(1)
+	const [totalPaginas, setTotalPaginas] = useState(1)
 
 	const handleChange = (e) => {
 		setFormData({
@@ -33,17 +37,23 @@ const Fichas = () => {
 	const obtenerFichas = async () => {
 		try {
 			const url = `${API_URL}/api/fichas`
-			const response = await axios.get(url)
+			const response = await axios.get(url, {
+				params: {
+					page: pagina,
+					limit: 5
+				}
+			})
 			const data = response.data
-			setFichas(data)
+			setFichas(data.fichas || [])
+			setTotalPaginas(data.totalPages || 1)
 		} catch (error) {
 			console.error('Error al obtener las fichas:', error.message)
 		}
 	}
 
 	useEffect(() => {
-		obtenerFichas()
-	}, [])
+		obtenerFichas(pagina)
+	}, [pagina])
 
 	const subirFicha = async (e) => {
 		e.preventDefault()
@@ -143,6 +153,24 @@ const Fichas = () => {
 					) : (
 						<p>No hay fichas registradas.</p>
 					)}
+
+					<div className='pagination-block'>
+						<button
+							className='pagination-button'
+							onClick={() => setPagina((p) => Math.max(p - 1, 1))}
+							disabled={pagina <= 1}>
+							<ArrowLeft />
+						</button>
+						<span>
+							Página {pagina} de {totalPaginas}
+						</span>
+						<button
+							className='pagination-button'
+							onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
+							disabled={pagina >= totalPaginas}>
+							<ArrowRight />
+						</button>
+					</div>
 				</div>
 
 				<>
