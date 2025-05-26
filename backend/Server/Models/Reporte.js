@@ -40,7 +40,11 @@ const Reporte = Sequelize.define(
 		estado: {
 			type: DataTypes.STRING,
 			defaultValue: 'Pendiente'
-		}
+		},
+		archivo: {
+			type: DataTypes.STRING,
+			allowNull: false
+		},
 	},
 	{
 		tableName: 'reporte',

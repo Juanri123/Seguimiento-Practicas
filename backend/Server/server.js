@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 const path = require("path");
 
 // Cargar variables de entorno
-dotenv.config(); // Puedes usar directamente dotenv.config() sin require("dotenv").config()
+dotenv.config();
 
 // Importar rutas
 const indexRoutes = require("./Routes/index.routes.js");
@@ -14,13 +14,12 @@ const indexRoutes = require("./Routes/index.routes.js");
 // Importar y ejecutar asociaciones entre modelos
 require("./Models/Asociaciones");
 
-// Crear el servidor
 const app = express();
 
 // Conexión a la base de datos
 async function connectDB() {
   try {
-    await sequelize.sync({ force: false }); // Cambiar a true si quieres reiniciar DB
+    await sequelize.sync({ force: false });
     console.log("Base de datos sincronizada");
   } catch (error) {
     console.log("Error al sincronizar base de datos:", error.message);
@@ -29,19 +28,19 @@ async function connectDB() {
 connectDB();
 
 // Middleware
-app.use(cors({ origin: "http://localhost:3001" })); // Cambiar si usas otro front
+app.use(cors({ origin: "http://localhost:3001" })); // Cambia si usas otro frontend
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Servir archivos estáticos desde la carpeta "uploads"
+// ✅ Servir archivos estáticos correctamente desde /uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Rutas
-app.use("/api", indexRoutes); // Acceso a /api/fichas, /api/usuarios, etc.
+// Rutas de API
+app.use("/api", indexRoutes);
 
 // Puerto del servidor
 const port = 3000;
 app.listen(port, () => {
-  console.log("Servidor conectado en http://localhost:"+ port);
+  console.log("Servidor conectado en http://localhost:" + port);
 });

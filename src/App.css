@@ -614,19 +614,19 @@ body {
 /* REPORTES */
 
 .report-list__item {
-	flex-wrap: wrap;
-	text-wrap: balance;
-	justify-content: space-between;
-	background-color: #f8f8f8;
-	padding: 24px;
-	column-gap: 10px;
-	border-radius: 8px;
-	display: grid;
-	margin-bottom: 15px;
-	grid-template-columns: repeat(3, 1fr);
-	grid-auto-flow: column;
-	align-items: center;
-	border-left: 1px solid #000;
+  flex-wrap: wrap;
+  text-wrap: balance;
+  justify-content: space-between;
+  background-color: #f8f8f8;
+  padding: 15px;
+  column-gap: 100px;
+  border-radius: 8px;
+  display: grid;
+  margin-bottom: 15px;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: column;
+  align-items: center;
+  border-left: 1px solid #000;
 }
 
 .report-list__button {
