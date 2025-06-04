@@ -10,6 +10,12 @@ exports.crearFicha = async (req, res) => {
 			.json({ message: 'Ya existe una ficha con ese código.' })
 	} //verificar si la ficha ya existe (código de la ficha)
 
+	if (codigo.length > 10) {
+		return res.status(400).json({
+			message: 'El código de la ficha no puede exceder los 10 caracteres.'
+		})
+	} // verificar que el código de la ficha no exceda los 10 caracteres
+
 	try {
 		const nuevaFicha = await Ficha.create({ codigo, programa })
 		res.status(201).json(nuevaFicha)

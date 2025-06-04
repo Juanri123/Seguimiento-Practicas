@@ -468,6 +468,9 @@ body {
 	grid-auto-flow: column;
 	align-items: center;
 }
+.bitacora-buttons{
+	display: flex;
+}
 
 /* Formulario para agregar bitácora */
 .bitacora-form {
@@ -513,7 +516,6 @@ body {
 
 .visit-buttons {
 	display: flex;
-	flex-direction: column;
 	gap: 4px;
 }
 
@@ -887,30 +889,4 @@ body {
 		padding: 0;
 		margin: 0 0 0 8px;
 	}
-}
-
-/* PAGINACIÓN */
-.pagination-block {
-	background-color: #fafafa;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 20px;
-	padding: 8px 12px;
-	margin-top: 20px;
-	margin-bottom: 12px;
-}
-.pagination-button {
-	padding: 4px;
-	background-color: #007bff;
-	border: none;
-	border-radius: 50%;
-	cursor: pointer;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-.pagination-button:disabled {
-	pointer-events: none;
-	opacity: .6;
 }

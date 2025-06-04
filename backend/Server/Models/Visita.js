@@ -21,9 +21,16 @@ const Visita = Sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    hora: {
+      type: DataTypes.TIME,
+      allowNull: false,
+    },
     estado: {
       type: DataTypes.STRING,
       defaultValue: "pendiente",
+      validate: {
+        isIn: [['pendiente', 'confirmada', 'rechazada']],
+      },
     },
     motivo: {
       type: DataTypes.STRING(120),

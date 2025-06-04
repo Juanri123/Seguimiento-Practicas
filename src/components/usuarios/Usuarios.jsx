@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import DataTable from 'react-data-table-component'
 import Navbar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
 import { API_URL } from '../../api/globalVars'
-import { ReactComponent as ArrowLeft } from '../../icons/ArrowLeft.svg'
-import { ReactComponent as ArrowRight } from '../../icons/ArrowRight.svg'
 
 const Usuarios = () => {
 	const [usuarios, setUsuarios] = useState([])
@@ -18,7 +17,7 @@ const Usuarios = () => {
 				{
 					params: {
 						page: page,
-						limit: 6
+						limit: 10
 					}
 				}
 			)
@@ -40,35 +39,37 @@ const Usuarios = () => {
 			<Navbar />
 			<Sidebar />
 			<div className='content'>
-				{usuarios.length > 0 ? (
-					usuarios.map((user) => (
-						<div className='report-list__item' key={user.id}>
-							<p>{user.nombres + user.apellidos}</p>
-							<p>{user.correo}</p>
-							<p>{user.identificacion}</p>
-							<p>{user.rol}</p>
-						</div>
-					))
-				) : (
-					<p>No hay usuarios registrados.</p>
-				)}
-				<div className='pagination-block'>
-					<button
-						className='pagination-button'
-						onClick={() => setPagina((p) => Math.max(p - 1, 1))}
-						disabled={pagina <= 1}>
-						<ArrowLeft />
-					</button>
-					<span>
-						Página {pagina} de {totalPaginas}
-					</span>
-					<button
-						className='pagination-button'
-						onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
-						disabled={pagina >= totalPaginas}>
-						<ArrowRight />
-					</button>
-				</div>
+				<DataTable
+					columns={[
+						{
+							id: 'nombre',
+							name: 'Nombre',
+							selector: (usuario) => usuario.nombres + ' ' + usuario.apellidos,
+							grow: '2'
+						},
+						{
+							id: 'correo',
+							name: 'Correo',
+							selector: (usuario) => usuario.correo,
+							grow: '2'
+						},
+						{
+							id: 'identificacion',
+							name: 'Identificación',
+							selector: (usuario) => usuario.identificacion
+						},
+						{
+							id: 'rol',
+							name: 'Rol',
+							selector: (usuario) => usuario.rol
+						}
+					]}
+					data={usuarios}
+					pagination
+					paginationPerPage={10}
+					responsive
+					progressPending={!usuarios.length}
+				/>
 			</div>
 		</div>
 	)
