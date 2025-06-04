@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import DataTable from 'react-data-table-component'
 import NavBar from '../generales/NavBar'
 import ReportForm from './ReportForm'
 import Sidebar from '../generales/Sidebar'
@@ -63,6 +64,7 @@ const Reportes = () => {
 	const deleteReport = async (e) => {
 		const id = e.target.id
 		const url = `${API_URL}/api/reportes/${id}`
+		
 		try {
 			await axios.delete(url)
 
@@ -98,56 +100,62 @@ const Reportes = () => {
 			<NavBar />
 			<Sidebar />
 			<div className='content'>
-				{reportes.length === 0 ? (
-					<p>No hay reportes registrados.</p>
-				) : (
-					reportes.map((reporte) => (
-						<div className='report-list__item' key={reporte.id}>
-							<p>{reporte.nombre}</p>
-							<p>{reporte.motivo}</p>
-							{/* Mostrar botón para ver archivo si existe */}
-							{reporte.archivo && (
-								<a
-									href={`${urlUploads}/${reporte.archivo}`}
-									target='_blank'
-									rel='noopener noreferrer'
-									className='button view-file-button'>
-									Ver archivo
-								</a>
-							)}
-							<p>{reporte.fecha}</p>
-
+			<DataTable
+				columns={[
+					{
+						id: 'id',
+						name: 'ID',
+						selector: (reporte) => reporte.id,
+						sortable: true
+					},
+					{
+						id: 'nombre',
+						name: 'Nombre',
+						selector: (reporte) => reporte.nombre,
+						sortable: true,
+						grow: 2,
+					},
+					{
+						id: 'archivo',
+						name: 'Archivo',
+						selector: (reporte) => reporte.archivo,
+						cell: (reporte) => (
+							<a
+								href={`${urlUploads}/${reporte.archivo}`}
+								target='_blank'
+								rel='noopener noreferrer'>
+								Ver archivo
+							</a>
+						)
+					},
+					{
+						id: 'fecha',
+						name: 'Fecha',
+						selector: (reporte) => reporte.fecha,
+						sortable: true
+					},
+					{
+						id: 'opciones',
+						name: 'Opciones',
+						cell: (reporte) => (
 							<button
 								id={reporte.id}
-								onClick={deleteReport}
-								className='report-list__button delete-button'>
+								className='report-list__button delete-button'
+								onClick={() => deleteReport(reporte.id)}>
 								<img
-									id='delete-img'
 									src='../assets/img/trash.png'
 									alt='Eliminar'
+									id='delete-img'
 								/>
 							</button>
-						</div>
-					))
-				)}
+						)
+					}
+				]}
+				data={reportes}
+				pagination
+				paginationPerPage={6}
+			/>
 
-				<div className='pagination-block'>
-					<button
-						className='pagination-button'
-						onClick={() => setPagina((p) => Math.max(p - 1, 1))}
-						disabled={pagina <= 1}>
-						<ArrowLeft />
-					</button>
-					<span>
-						Página {pagina} de {totalPaginas}
-					</span>
-					<button
-						className='pagination-button'
-						onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
-						disabled={pagina >= totalPaginas}>
-						<ArrowRight />
-					</button>
-				</div>
 
 				{rol === 'instructor' && (
 					<>

@@ -94,7 +94,7 @@ const ReportForm = ({ onAddReporte, onClose }) => {
 
   return (
     <form className='report-form' onSubmit={handleSubmit} encType='multipart/form-data'>
-      <h2 className='report-form__title'>Agregar Reporte</h2>
+      <h3 className='report-form__title'>Agregar Reporte</h3>
       <input
         type='text'
         name='nombre'
