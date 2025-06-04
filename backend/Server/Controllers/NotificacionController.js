@@ -5,7 +5,7 @@ exports.crearNotificacion = async (req, res) => {
   const { mensaje, id_usuario, estado = 'pendiente' } = req.body;
 
   if (!mensaje || !id_usuario) {
-    return res.status(400).json({ message: 'Los campos mensaje, id_usuario y tipo son obligatorios.' });
+    return res.status(400).json({ message: 'Los campos mensaje e id_usuario son obligatorios.' });
   }
 
   try {
@@ -15,7 +15,6 @@ exports.crearNotificacion = async (req, res) => {
       estado,
     });
 
-    // Responder con éxito y el objeto de la nueva notificación
     res.status(201).json({
       message: 'Notificación creada con éxito',
       data: nuevaNotificacion
@@ -26,7 +25,6 @@ exports.crearNotificacion = async (req, res) => {
   }
 };
 
-
 // Obtener notificaciones por usuario
 exports.obtenerNotificaciones = async (req, res) => {
   const { id_usuario } = req.params;
@@ -34,6 +32,7 @@ exports.obtenerNotificaciones = async (req, res) => {
   try {
     const notificaciones = await Notificacion.findAll({
       where: { id_usuario },
+      order: [['id', 'DESC']]
     });
 
     res.status(200).json(notificaciones);
@@ -43,7 +42,7 @@ exports.obtenerNotificaciones = async (req, res) => {
   }
 };
 
-// Actualizar estado a 'leida'
+// Marcar como leída
 exports.actualizarEstadoNotificacion = async (req, res) => {
   const { id } = req.params;
 
@@ -67,18 +66,21 @@ exports.actualizarEstadoNotificacion = async (req, res) => {
   }
 };
 
+// Eliminar notificación
 exports.eliminarNotificacion = async (req, res) => {
-    try {
-        const { id } = req.params;
+  const { id } = req.params;
 
-        const notificacion = await Notificacion.findByPk(id);
-        if (!notificacion) {
-            return res.status(404).json({ error: 'Notificacion no encontrada' });
-        }
+  try {
+    const notificacion = await Notificacion.findByPk(id);
 
-        await notificacion.destroy();
-        res.status(200).json({ message: 'Notificacion eliminada correctamente' });
-    } catch (error) {
-        res.status(500).json({ error: 'Error al eliminar la notificacion' });
+    if (!notificacion) {
+      return res.status(404).json({ error: 'Notificación no encontrada' });
     }
+
+    await notificacion.destroy();
+    res.status(200).json({ message: 'Notificación eliminada correctamente' });
+  } catch (error) {
+    console.error("Error al eliminar la notificación:", error);
+    res.status(500).json({ error: 'Error al eliminar la notificación' });
+  }
 };

@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const NotificacionController = require('../Controllers/NotificacionController');
 
-// Crear notificación
+// Crear
 router.post('/', NotificacionController.crearNotificacion);
 
-// Obtener notificaciones por usuario
+// Obtener por usuario
 router.get('/usuario/:id_usuario', NotificacionController.obtenerNotificaciones);
 
-// Actualizar (marcar como leída o cambiar estado)
+// Marcar como leída
 router.put('/:id', NotificacionController.actualizarEstadoNotificacion);
 
+// Eliminar
 router.delete('/:id', NotificacionController.eliminarNotificacion);
 
 module.exports = router;

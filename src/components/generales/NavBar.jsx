@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import { API_URL } from '../../api/globalVars'
-import {ReactComponent as BellIcon} from '../../icons/Bell.svg'
+import { ReactComponent as BellIcon } from '../../icons/Bell.svg'
 
 const Navbar = () => {
 	const [notificaciones, setNotificaciones] = useState([])
@@ -12,20 +12,13 @@ const Navbar = () => {
 
 	const cargarNotificaciones = async () => {
 		const usuarioId = localStorage.getItem('usuarioId')
-		if (usuarioId) {
-			try {
-				const response = await axios.get(
-					`http://localhost:3000/api/notificaciones/usuario/${usuarioId}`
-				)
-				setNotificaciones(response.data)
-				localStorage.setItem('notificaciones', JSON.stringify(response.data))
-			} catch (error) {
-				console.error('Error al cargar notificaciones:', error)
-			}
-		} else {
-			const notificacionesGuardadas =
-				JSON.parse(localStorage.getItem('notificaciones')) || []
-			setNotificaciones(notificacionesGuardadas)
+		if (!usuarioId) return
+
+		try {
+			const response = await axios.get(`${API_URL}/api/notificaciones/usuario/${usuarioId}`)
+			setNotificaciones(response.data)
+		} catch (error) {
+			console.error('Error al cargar notificaciones:', error)
 		}
 	}
 
@@ -41,7 +34,7 @@ const Navbar = () => {
 		return () => {
 			window.removeEventListener('notificacionesActualizadas', handler)
 		}
-	}, []) // Dependencias vacías para cargar las notificaciones al inicio
+	}, [])
 
 	const handleLogout = () => {
 		localStorage.removeItem('rol')
@@ -62,14 +55,16 @@ const Navbar = () => {
 	}
 
 	const handleNotificacionLeida = async (id) => {
-		const nuevas = notificaciones.map((n) =>
-			n.id === id ? { ...n, estado: 'leida' } : n
-		)
-		setNotificaciones(nuevas)
-		localStorage.setItem('notificaciones', JSON.stringify(nuevas))
-
 		try {
-			await axios.patch(`${API_URL}/api/notificaciones/${id}`)
+			await axios.put(`${API_URL}/api/notificaciones/${id}`)
+
+			// Actualizar en el estado local
+			const nuevas = notificaciones.map((n) =>
+				n.id === id ? { ...n, estado: 'leida' } : n
+			)
+			setNotificaciones(nuevas)
+
+			// Notificar a otros componentes si es necesario
 			window.dispatchEvent(new Event('notificacionesActualizadas'))
 		} catch (error) {
 			console.error('Error al marcar notificación como leída:', error)
@@ -95,7 +90,7 @@ const Navbar = () => {
 					onClick={() => setMostrarPopup(!mostrarPopup)}>
 					<BellIcon className='navbar-icon' />
 					{notificacionesPendientes.length > 0 && (
-						<span style={{cursor: 'default'}} className='notification-count'>
+						<span style={{ cursor: 'default' }} className='notification-count'>
 							{notificacionesPendientes.length}
 						</span>
 					)}
