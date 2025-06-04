@@ -57,17 +57,56 @@ const Navbar = () => {
 	const handleNotificacionLeida = async (id) => {
 		try {
 			await axios.put(`${API_URL}/api/notificaciones/${id}`)
-
-			// Actualizar en el estado local
 			const nuevas = notificaciones.map((n) =>
 				n.id === id ? { ...n, estado: 'leida' } : n
 			)
 			setNotificaciones(nuevas)
-
-			// Notificar a otros componentes si es necesario
 			window.dispatchEvent(new Event('notificacionesActualizadas'))
 		} catch (error) {
 			console.error('Error al marcar notificación como leída:', error)
+		}
+	}
+
+	const handleEliminarNotificacion = async (id) => {
+		try {
+			await axios.delete(`${API_URL}/api/notificaciones/${id}`)
+			setNotificaciones(notificaciones.filter(n => n.id !== id))
+			window.dispatchEvent(new Event('notificacionesActualizadas'))
+		} catch (error) {
+			console.error('Error al eliminar notificación:', error)
+		}
+	}
+
+	const handleEliminarTodas = async () => {
+		const usuarioId = localStorage.getItem('usuarioId')
+		if (!usuarioId) return
+
+		const confirm = await Swal.fire({
+			title: '¿Eliminar todas las notificaciones?',
+			text: 'Esta acción no se puede deshacer.',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Sí, eliminar todas',
+			cancelButtonText: 'Cancelar'
+		})
+
+		if (confirm.isConfirmed) {
+			try {
+				await axios.delete(`${API_URL}/api/notificaciones/usuario/${usuarioId}`)
+				setNotificaciones([])
+				window.dispatchEvent(new Event('notificacionesActualizadas'))
+
+				Swal.fire({
+					icon: 'success',
+					title: 'Notificaciones eliminadas',
+					timer: 1500,
+					showConfirmButton: false,
+					toast: true,
+					position: 'top'
+				})
+			} catch (error) {
+				console.error('Error al eliminar todas las notificaciones:', error)
+			}
 		}
 	}
 
@@ -84,7 +123,6 @@ const Navbar = () => {
 				draggable='false'
 			/>
 			<div className='navbar-items'>
-				{/* Botón de notificaciones */}
 				<div
 					className='navbar-notifications'
 					onClick={() => setMostrarPopup(!mostrarPopup)}>
@@ -96,7 +134,6 @@ const Navbar = () => {
 					)}
 				</div>
 
-				{/* Botón de cerrar sesión */}
 				<input
 					type='button'
 					value='Cerrar sesión'
@@ -104,7 +141,6 @@ const Navbar = () => {
 					onClick={handleLogout}
 				/>
 
-				{/* Icono de usuario */}
 				<Link to={'/ajustes'} draggable='false'>
 					<img
 						src='../assets/img/user.png'
@@ -114,7 +150,6 @@ const Navbar = () => {
 					/>
 				</Link>
 
-				{/* Icono de inicio */}
 				<Link to={'/inicio'} draggable='false'>
 					<img
 						src='../assets/img/home.png'
@@ -125,7 +160,6 @@ const Navbar = () => {
 				</Link>
 			</div>
 
-			{/* Popup de notificaciones */}
 			{mostrarPopup && (
 				<div className='notification-popup'>
 					<h3>Notificaciones</h3>
@@ -139,15 +173,29 @@ const Navbar = () => {
 									notificacion.estado === 'pendiente' ? 'pendiente' : 'leida'
 								}`}>
 								<p>{notificacion.mensaje}</p>
+
 								{notificacion.estado === 'pendiente' && (
-									<button
-										onClick={() => handleNotificacionLeida(notificacion.id)}>
+									<button className='marcar-leida' onClick={() => handleNotificacionLeida(notificacion.id)}>
 										Marcar como leída
 									</button>
 								)}
+								<button
+									className='eliminar-id'
+									onClick={() => handleEliminarNotificacion(notificacion.id)}>
+									Eliminar
+								</button>
 							</div>
 						))
 					)}
+
+					{notificaciones.length > 0 && (
+						<button
+							className='eliminar-todas-btn'
+							onClick={handleEliminarTodas}>
+							Eliminar todas
+						</button>
+					)}
+
 					<button
 						onClick={() => setMostrarPopup(false)}
 						className='cerrar-popup'>

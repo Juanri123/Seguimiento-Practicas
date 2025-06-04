@@ -14,4 +14,6 @@ router.put('/:id', NotificacionController.actualizarEstadoNotificacion);
 // Eliminar
 router.delete('/:id', NotificacionController.eliminarNotificacion);
 
+router.delete('/usuario/:id_usuario', NotificacionController.eliminarTodasNotificacionesUsuario);
+
 module.exports = router;

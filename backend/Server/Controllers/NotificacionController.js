@@ -84,3 +84,22 @@ exports.eliminarNotificacion = async (req, res) => {
     res.status(500).json({ error: 'Error al eliminar la notificación' });
   }
 };
+exports.eliminarTodasNotificacionesUsuario = async (req, res) => {
+  const { id_usuario } = req.params;
+
+  try {
+    const cantidad = await Notificacion.destroy({
+      where: { id_usuario }
+    });
+
+    res.status(200).json({
+      message: `Se eliminaron ${cantidad} notificaciones del usuario ${id_usuario}`
+    });
+  } catch (error) {
+    console.error("Error al eliminar notificaciones del usuario:", error);
+    res.status(500).json({
+      message: 'Error al eliminar las notificaciones del usuario',
+      error: error.message || error
+    });
+  }
+};
