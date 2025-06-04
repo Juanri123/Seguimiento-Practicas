@@ -8,7 +8,7 @@ const Ficha = Sequelize.define('Ficha', {
     primaryKey: true
   },
   codigo: {
-    type: DataTypes.STRING(20),
+    type: DataTypes.INTEGER(10),
     allowNull: false,
     unique: true
   },

@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import DataTable from 'react-data-table-component'
 import Sidebar from '../generales/Sidebar'
 import Navbar from '../generales/NavBar'
 import { API_URL } from '../../api/globalVars'
-import { ReactComponent as ArrowLeft } from '../../icons/ArrowLeft.svg'
-import { ReactComponent as ArrowRight } from '../../icons/ArrowRight.svg'
 
 const Fichas = () => {
 	const [mostrarFormulario, setMostrarFormulario] = useState(false)
@@ -40,7 +39,7 @@ const Fichas = () => {
 			const response = await axios.get(url, {
 				params: {
 					page: pagina,
-					limit: 5
+					limit: 8
 				}
 			})
 			const data = response.data
@@ -71,7 +70,6 @@ const Fichas = () => {
 		try {
 			const url = `${API_URL}/api/fichas`
 			await axios.post(url, formData)
-
 			await Swal.fire({
 				icon: 'success',
 				timer: 1200,
@@ -133,44 +131,44 @@ const Fichas = () => {
 			<Sidebar />
 			<div className='content'>
 				<div className='seccion-fichas'>
-					{fichas?.length > 0 ? (
-						fichas.map((ficha) => (
-							<div key={ficha.codigo} className='fichas-item'>
-								<p>Ficha: {ficha.codigo}</p>
-								<p>Programa: {ficha.programa}</p>
-								<button
-									id={ficha.id}
-									onClick={eliminarFicha}
-									className='button delete-button'>
-									<img
-										id='delete-img'
-										src='../assets/img/trash.png'
-										alt='Eliminar'
-									/>
-								</button>
-							</div>
-						))
+					{fichas.length > 0 ? (
+						<DataTable
+							columns={[
+								{
+									id: 'codigo',
+									name: 'Código',
+									selector: (ficha) => ficha.codigo || 'N/A'
+								},
+								{
+									id: 'programa',
+									name: 'Programa',
+									selector: (ficha) => ficha.programa || 'N/A'
+								},
+								{
+									id: 'acciones',
+									name: 'Acciones',
+									cell: (ficha) => (
+										<button
+											id={ficha.id}
+											onClick={eliminarFicha}
+											className='button delete-button'>
+											<img
+												id='delete-img'
+												src='../assets/img/trash.png'
+												alt='Eliminar'
+											/>
+										</button>
+									)
+								}
+							]}
+							data={fichas}
+							responsive
+							pagination
+							progressPending={!fichas.length}
+						/>
 					) : (
-						<p>No hay fichas registradas.</p>
+						<span>No hay fichas registradas.</span>
 					)}
-
-					<div className='pagination-block'>
-						<button
-							className='pagination-button'
-							onClick={() => setPagina((p) => Math.max(p - 1, 1))}
-							disabled={pagina <= 1}>
-							<ArrowLeft />
-						</button>
-						<span>
-							Página {pagina} de {totalPaginas}
-						</span>
-						<button
-							className='pagination-button'
-							onClick={() => setPagina((p) => Math.min(p + 1, totalPaginas))}
-							disabled={pagina >= totalPaginas}>
-							<ArrowRight />
-						</button>
-					</div>
 				</div>
 
 				<>
