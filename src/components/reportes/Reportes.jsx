@@ -128,16 +128,21 @@ const Reportes = () => {
 						{
 							id: 'opciones',
 							name: 'Opciones',
-							cell: (reporte) => (
-								<button
-									className='report-list__button delete-button'
-									onClick={() => deleteReport(reporte.id)}>
-									<img
-										src='../assets/img/trash.png'
-										alt='Eliminar'
-										id='delete-img'
-									/>
-								</button>
+							cell: (reporte) => 
+							rol === 'instructor' ? (
+								<div className='report-options'>
+									<button
+										className='report-list__button delete-button'
+										onClick={() => deleteReport(reporte.id)}>
+										<img
+											src='../assets/img/trash.png'
+											alt='Eliminar'
+											id='delete-img'
+										/>
+									</button>
+								</div>
+							) : (
+								<span>N/A</span>
 							)
 						}
 					]}
