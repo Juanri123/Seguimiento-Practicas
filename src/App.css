@@ -312,12 +312,6 @@ body {
 .notification-item.leida {
 	opacity: 0.6;
 }
-
-.notification-item.pendiente {
-	font-weight: bold;
-	background-color: #f0f8ff;
-	border-left: 4px solid #007bff;
-}
 .cerrar-popup {
 	margin-top: 15px;
 	background-color: #6c757d;
