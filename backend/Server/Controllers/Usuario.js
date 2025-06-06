@@ -74,7 +74,7 @@ exports.crearUsuario = async (req, res) => {
 exports.obtenerUsuarios = async (req, res) => {
 	try {
 		const page = parseInt(req.query.page) || 1;
-		const limit = parseInt(req.query.limit) || 6;
+		const limit = parseInt(req.query.limit) || 10;
 		const offset = (page - 1) * limit;
 
 		const { count, rows } = await Usuario.findAndCountAll({
@@ -88,7 +88,7 @@ exports.obtenerUsuarios = async (req, res) => {
 
 		return res.status(200).json({
 			usuarios: rows,
-			total: count,
+			totalUsuarios: count,
 			page,
 			limit,
 			totalPages: Math.ceil(count / limit)

@@ -9,11 +9,18 @@ exports.getAllBitacoras = async (req, res) => {
     const pagina = parseInt(req.query.pagina) || 1;
     const limite = parseInt(req.query.limite) || 6;
     const offset = (pagina - 1) * limite;
+    const { usuarioId } = req.query;
+
+    const where = {};
+    if (usuarioId) {
+      where.aprendiz_id = usuarioId;
+    }
 
     const { count, rows } = await Bitacoras.findAndCountAll({
+      where,
       offset,
       limit: limite,
-      order: [['fecha', 'DESC']], // puedes cambiar el orden si lo deseas
+      order: [['fecha', 'DESC']],
     });
 
     const totalPaginas = Math.ceil(count / limite);

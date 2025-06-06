@@ -8,38 +8,28 @@ import { API_URL } from '../../api/globalVars'
 
 const Fichas = () => {
 	const [mostrarFormulario, setMostrarFormulario] = useState(false)
-	const toggleForm = () => {
-		if (mostrarFormulario) {
-			setFormData({
-				codigo: '',
-				programa: ''
-			})
-		}
-		setMostrarFormulario(!mostrarFormulario)
-	}
-	const [formData, setFormData] = useState({
-		codigo: '',
-		programa: ''
-	})
-
+	const [formData, setFormData] = useState({ codigo: '', programa: '' })
 	const [fichas, setFichas] = useState([])
 	const [pagina, setPagina] = useState(1)
 	const [totalPaginas, setTotalPaginas] = useState(1)
 
+	const toggleForm = () => {
+		if (mostrarFormulario) {
+			setFormData({ codigo: '', programa: '' })
+		}
+		setMostrarFormulario(!mostrarFormulario)
+	}
+
 	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value
-		})
+		setFormData({ ...formData, [e.target.name]: e.target.value })
 	}
 
 	const obtenerFichas = async () => {
 		try {
-			const url = `${API_URL}/api/fichas`
-			const response = await axios.get(url, {
+			const response = await axios.get(`${API_URL}/api/fichas`, {
 				params: {
 					page: pagina,
-					limit: 8
+					limit: 10
 				}
 			})
 			const data = response.data
@@ -51,12 +41,11 @@ const Fichas = () => {
 	}
 
 	useEffect(() => {
-		obtenerFichas(pagina)
+		obtenerFichas()
 	}, [pagina])
 
 	const subirFicha = async (e) => {
 		e.preventDefault()
-
 		if (!formData.codigo || !formData.programa) {
 			Swal.fire({
 				icon: 'error',
@@ -68,8 +57,7 @@ const Fichas = () => {
 		}
 
 		try {
-			const url = `${API_URL}/api/fichas`
-			await axios.post(url, formData)
+			await axios.post(`${API_URL}/api/fichas`, formData)
 			await Swal.fire({
 				icon: 'success',
 				timer: 1200,
@@ -78,12 +66,9 @@ const Fichas = () => {
 				position: 'bottom-left',
 				showConfirmButton: false
 			})
-
-			await obtenerFichas()
-			setFormData({
-				codigo: '',
-				programa: ''
-			})
+			setPagina(1) // Volver a la primera página
+			obtenerFichas()
+			setFormData({ codigo: '', programa: '' })
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
@@ -99,9 +84,8 @@ const Fichas = () => {
 
 	const eliminarFicha = async (e) => {
 		const id = e.target.id
-		const url = `${API_URL}/api/fichas/${id}`
 		try {
-			await axios.delete(url)
+			await axios.delete(`${API_URL}/api/fichas/${id}`)
 			await Swal.fire({
 				icon: 'success',
 				title: 'Ficha eliminada',
@@ -131,51 +115,48 @@ const Fichas = () => {
 			<Sidebar />
 			<div className='content'>
 				<div className='seccion-fichas'>
-					{fichas.length > 0 ? (
-						<DataTable
-							columns={[
-								{
-									id: 'codigo',
-									name: 'Código',
-									selector: (ficha) => ficha.codigo || 'N/A'
-								},
-								{
-									id: 'programa',
-									name: 'Programa',
-									selector: (ficha) => ficha.programa || 'N/A'
-								},
-								{
-									id: 'acciones',
-									name: 'Acciones',
-									cell: (ficha) => (
-										<button
-											id={ficha.id}
-											onClick={eliminarFicha}
-											className='button delete-button'>
-											<img
-												id='delete-img'
-												src='../assets/img/trash.png'
-												alt='Eliminar'
-											/>
-										</button>
-									)
-								}
-							]}
-							data={fichas}
-							responsive
-							pagination
-							progressPending={!fichas.length}
-						/>
-					) : (
-						<span>No hay fichas registradas.</span>
-					)}
+					<DataTable
+						columns={[
+							{
+								id: 'codigo',
+								name: 'Código',
+								selector: (ficha) => ficha.codigo || 'N/A'
+							},
+							{
+								id: 'programa',
+								name: 'Programa',
+								selector: (ficha) => ficha.programa || 'N/A'
+							},
+							{
+								id: 'acciones',
+								name: 'Acciones',
+								cell: (ficha) => (
+									<button
+										id={ficha.id}
+										onClick={eliminarFicha}
+										className='button delete-button'>
+										<img
+											id='delete-img'
+											src='../assets/img/trash.png'
+											alt='Eliminar'
+										/>
+									</button>
+								)
+							}
+						]}
+						data={fichas}
+						responsive
+						pagination
+						paginationServer
+						paginationTotalRows={totalPaginas * 10}
+						onChangePage={(page) => setPagina(page)}
+						progressPending={!fichas.length}
+					/>
 				</div>
 
-				<>
-					<button className='button register-button' onClick={toggleForm}>
-						{mostrarFormulario ? 'Cerrar Formulario' : 'Agregar Ficha'}
-					</button>
-				</>
+				<button className='button register-button' onClick={toggleForm}>
+					{mostrarFormulario ? 'Cerrar Formulario' : 'Agregar Ficha'}
+				</button>
 
 				{mostrarFormulario && (
 					<div className='report-form'>

@@ -10,15 +10,15 @@ import { API_URL } from '../../api/globalVars'
 const Reportes = () => {
 	const [reportes, setReportes] = useState([])
 	const [pagina, setPagina] = useState(1)
-	const [totalPaginas, setTotalPaginas] = useState(1)
+	const [totalRegistros, setTotalRegistros] = useState(0)
 	const [rol, setRol] = useState('')
 	const [mostrarFormulario, setMostrarFormulario] = useState(false)
 
+	const limite = 10 // número de elementos por página
+
 	useEffect(() => {
 		const rolGuardado = localStorage.getItem('rol')
-		if (rolGuardado) {
-			setRol(rolGuardado.toLowerCase())
-		}
+		if (rolGuardado) setRol(rolGuardado.toLowerCase())
 	}, [])
 
 	useEffect(() => {
@@ -28,18 +28,14 @@ const Reportes = () => {
 	const obtenerReportes = async (pagina = 1) => {
 		try {
 			const { data } = await axios.get(`${API_URL}/api/reportes/verReportes`, {
-				params: {
-					pagina,
-					limite: 6
-				}
+				params: { pagina, limite }
 			})
-
 			setReportes(data.reportes || [])
-			setTotalPaginas(data.totalPaginas)
+			setTotalRegistros(data.totalRegistros || 0) // total de elementos del backend
 		} catch (error) {
-			if (error.response && error.response.status === 404) {
+			if (error.response?.status === 404) {
 				setReportes([])
-				setTotalPaginas(1)
+				setTotalRegistros(0)
 			} else {
 				Swal.fire({
 					title: 'Error en reportes',
@@ -48,7 +44,6 @@ const Reportes = () => {
 					text: error.message,
 					icon: 'error'
 				})
-				console.error('Error al obtener reportes:', error.message)
 			}
 		}
 	}
@@ -60,12 +55,9 @@ const Reportes = () => {
 	}
 
 	const deleteReport = async (id) => {
-		const url = `${API_URL}/api/reportes/${id}`
-
 		try {
-			await axios.delete(url)
-
-			await Swal.fire({
+			await axios.delete(`${API_URL}/api/reportes/${id}`)
+			Swal.fire({
 				title: 'Reporte eliminado.',
 				text: 'El reporte fue eliminado correctamente.',
 				toast: true,
@@ -74,9 +66,7 @@ const Reportes = () => {
 				showConfirmButton: false,
 				timer: 1200
 			})
-			const updatedReports = reportes.filter((reporte) => reporte.id !== id)
-			setReportes(updatedReports)
-			obtenerReportes()
+			obtenerReportes(pagina)
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
@@ -109,7 +99,6 @@ const Reportes = () => {
 						{
 							id: 'archivo',
 							name: 'Archivo',
-							selector: (reporte) => reporte.archivo,
 							cell: (reporte) => (
 								<a
 									href={`${urlUploads}/${reporte.archivo}`}
@@ -128,27 +117,31 @@ const Reportes = () => {
 						{
 							id: 'opciones',
 							name: 'Opciones',
-							cell: (reporte) => 
-							rol === 'instructor' ? (
-								<div className='report-options'>
-									<button
-										className='report-list__button delete-button'
-										onClick={() => deleteReport(reporte.id)}>
-										<img
-											src='../assets/img/trash.png'
-											alt='Eliminar'
-											id='delete-img'
-										/>
-									</button>
-								</div>
-							) : (
-								<span>N/A</span>
-							)
+							cell: (reporte) =>
+								rol === 'instructor' ? (
+									<div className='report-options'>
+										<button
+											className='report-list__button delete-button'
+											onClick={() => deleteReport(reporte.id)}>
+											<img
+												src='../assets/img/trash.png'
+												alt='Eliminar'
+												id='delete-img'
+											/>
+										</button>
+									</div>
+								) : (
+									<span>N/A</span>
+								)
 						}
 					]}
 					data={reportes}
 					pagination
-					paginationPerPage={8}
+					paginationServer // importante para paginación controlada
+					paginationTotalRows={totalRegistros} // total de registros del backend
+					paginationPerPage={limite} // 10 elementos por página
+					paginationDefaultPage={pagina} // página actual
+					onChangePage={(page) => setPagina(page)} // cambia página
 					responsive
 					progressPending={!reportes.length}
 				/>
@@ -158,7 +151,6 @@ const Reportes = () => {
 						<button className='button register-button' onClick={toggleForm}>
 							{mostrarFormulario ? 'Cerrar Formulario' : 'Agregar Reporte'}
 						</button>
-
 						{mostrarFormulario && (
 							<ReportForm onAddReporte={agregarReporte} onClose={toggleForm} />
 						)}

@@ -17,26 +17,33 @@ const BitacoraList = () => {
 
 	const obtenerBitacoras = useCallback(async () => {
 		try {
+			const params = { pagina, limite: 10 }
+			if (rol === 'aprendiz') {
+				params.usuarioId = idUsuario
+			}
 			const res = await axios.get(`${API_URL}/api/bitacoras/verBitacoras`, {
-				params: { pagina, limite: 6 }
+				params
 			})
 			setBitacoras(res.data.bitacoras)
 			setTotalPaginas(res.data.totalPaginas)
 		} catch (error) {
 			console.error('Error al obtener las bitácoras:', error.response || error)
-			setError(
-				'Error al obtener bitácoras. Consulta la consola para más detalles.'
-			)
+			setError('Error al obtener bitácoras. Consulta la consola para más detalles.')
 		}
-	}, [pagina])
+	}, [pagina, rol, idUsuario])
 
 	useEffect(() => {
 		const rolGuardado = localStorage.getItem('rol')
 		const idGuardado = localStorage.getItem('usuarioId')
 		if (rolGuardado) setRol(rolGuardado.toLowerCase())
 		if (idGuardado) setIdUsuario(idGuardado)
-		obtenerBitacoras()
-	}, [obtenerBitacoras])
+	}, [])
+
+	useEffect(() => {
+		if (rol && idUsuario) {
+			obtenerBitacoras()
+		}
+	}, [obtenerBitacoras, rol, idUsuario])
 
 	const handleAceptar = async (id) => {
 		try {
@@ -62,8 +69,7 @@ const BitacoraList = () => {
 
 			const idAprendiz = bitacoraRechazar.aprendiz_id
 			const claveNotificaciones = `notificaciones_${idAprendiz}`
-			const notificaciones =
-				JSON.parse(localStorage.getItem(claveNotificaciones)) || []
+			const notificaciones = JSON.parse(localStorage.getItem(claveNotificaciones)) || []
 
 			const nuevaNotificacion = {
 				id: Date.now(),
@@ -82,10 +88,7 @@ const BitacoraList = () => {
 			setBitacoraRechazar(null)
 			obtenerBitacoras()
 		} catch (error) {
-			console.error(
-				'Error al rechazar bitácora:',
-				error.response?.data || error
-			)
+			console.error('Error al rechazar bitácora:', error.response?.data || error)
 			setMostrarMotivoPopup(false)
 			setMotivoRechazo('')
 			setBitacoraRechazar(null)
@@ -98,12 +101,6 @@ const BitacoraList = () => {
 
 			<DataTable
 				columns={[
-					{
-						id: 'motivo',
-						name: 'Motivo',
-						selector: (bitacora) => bitacora.motivo || 'N/A',
-						sortable: true
-					},
 					{
 						id: 'fecha',
 						name: 'Fecha',
@@ -136,25 +133,27 @@ const BitacoraList = () => {
 					{
 						id: 'acciones',
 						name: 'Acciones',
-						cell: (bitacora) => 
-              rol === 'instructor' ? (
-							<div className='bitacora-buttons'>
-								<button
-									className='button accept'
-									onClick={() => handleAceptar(bitacora.id)}>
-									✔️
-								</button>
-								<button
-									className='button reject'
-									onClick={() => handleRechazar(bitacora)}>
-									❌
-								</button>
-							</div>
-              ) : (
-                <span>N/A</span>
-              )}
+						cell: (bitacora) =>
+							rol === 'instructor' ? (
+								<div className='bitacora-buttons'>
+									<button className='button accept' onClick={() => handleAceptar(bitacora.id)}>
+										✔️
+									</button>
+									<button className='button reject' onClick={() => handleRechazar(bitacora)}>
+										❌
+									</button>
+								</div>
+							) : (
+								<span>N/A</span>
+							)
+					}
 				]}
 				data={bitacoras}
+				pagination
+				paginationServer
+				paginationTotalRows={totalPaginas * 10}
+				paginationPerPage={10}
+				onChangePage={(page) => setPagina(page)}
 			/>
 
 			{rol === 'aprendiz' && (
