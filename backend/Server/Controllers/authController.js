@@ -86,10 +86,10 @@ const resetPassword = async (req, res) => {
     res.status(500).json({ message: "Error al procesar la solicitud." });
   }
 };
+
 // ==============================
 // Login
 // ==============================
-
 const login = async (req, res) => {
   try {
     const { tipoCuenta, documento, password } = req.body;
@@ -113,6 +113,7 @@ const login = async (req, res) => {
     if (!validarPassword) {
       return res.status(401).json({ message: "Contraseña incorrecta" });
     }
+    
 
     const token = jwt.sign(
       { id: usuario.id, rol: usuario.rol }, // puedes agregar más info si necesitas
@@ -131,9 +132,8 @@ const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error en login:", error.response);
+    console.error("Error en login:", error.response || error.message);
     res.status(500).json({ message: "Error en el servidor", error: error.message });
-    console.log(req.body);
   }
 };
 

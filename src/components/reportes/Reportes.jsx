@@ -9,6 +9,7 @@ import { API_URL } from '../../api/globalVars'
 
 const Reportes = () => {
 	const [reportes, setReportes] = useState([])
+	const [todosLosReportes, setTodosLosReportes] = useState([])
 	const [pagina, setPagina] = useState(1)
 	const [totalRegistros, setTotalRegistros] = useState(0)
 	const [rol, setRol] = useState('')
@@ -31,6 +32,7 @@ const Reportes = () => {
 				params: { pagina, limite }
 			})
 			setReportes(data.reportes || [])
+			setTodosLosReportes(data.reportes || [])
 			setTotalRegistros(data.totalRegistros || 0) // total de elementos del backend
 		} catch (error) {
 			if (error.response?.status === 404) {
@@ -82,11 +84,33 @@ const Reportes = () => {
 
 	const urlUploads = `${API_URL}/uploads`
 
+		const filtrarReporte = (e) => {
+		const valorBusqueda = e.target.value.toLowerCase()
+		if (valorBusqueda === '') {
+			setReportes(todosLosReportes)
+		} else {
+			const reportesFiltrados = todosLosReportes.filter(reporte =>
+				reporte.nombre.toLowerCase().includes(valorBusqueda)
+			)
+			setReportes(reportesFiltrados)
+		}
+	}
+
+	const handleChange = (e) => {
+		filtrarReporte(e)
+	}
+
 	return (
 		<div className='container'>
 			<NavBar />
 			<Sidebar />
 			<div className='content'>
+				<input
+					type="search"
+					className='input register-input'
+					placeholder='Realice su búsqueda ...'
+					onChange={handleChange}
+				/>
 				<DataTable
 					columns={[
 						{
@@ -136,14 +160,14 @@ const Reportes = () => {
 						}
 					]}
 					data={reportes}
+					onChangePage={(page) => setPagina(page)} // cambia página
 					pagination
+					paginationDefaultPage={pagina} // página actual
+					paginationPerPage={limite} // 10 elementos por página
 					paginationServer // importante para paginación controlada
 					paginationTotalRows={totalRegistros} // total de registros del backend
-					paginationPerPage={limite} // 10 elementos por página
-					paginationDefaultPage={pagina} // página actual
-					onChangePage={(page) => setPagina(page)} // cambia página
-					responsive
 					progressPending={!reportes.length}
+					responsive
 				/>
 
 				{rol === 'instructor' && (

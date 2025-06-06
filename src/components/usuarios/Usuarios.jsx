@@ -4,9 +4,11 @@ import DataTable from 'react-data-table-component'
 import Navbar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
 import { API_URL } from '../../api/globalVars'
+import Swal from 'sweetalert2'
 
 const Usuarios = () => {
 	const [usuarios, setUsuarios] = useState([])
+	const [todosLosUsuarios, setTodosLosUsuarios] = useState([])
 	const [pagina, setPagina] = useState(1)
 	const [totalPaginas, setTotalPaginas] = useState(1)
 	const [totalRegistros, setTotalRegistros] = useState(0)
@@ -22,14 +24,37 @@ const Usuarios = () => {
 				}
 			})
 
-			const data = response.data
-			setUsuarios(data.usuarios || [])
+			const data = response.data.usuarios
+			setUsuarios(data || [])
+			setTodosLosUsuarios(data || [])
 			setTotalRegistros(data.totalUsuarios || 0)
 			setTotalPaginas(data.totalPages || 1)
 			setCargando(false)
 		} catch (error) {
-			console.error('Error al obtener los usuarios:', error.message)
+			Swal.fire({
+				icon: 'error',
+				title: 'Error',
+				text: 'No se pudieron obtener los usuarios. Inténtalo de nuevo más tarde.',
+				toast: 'true',
+				position: 'center',
+				showConfirmButton: false,
+				timer: 3000
+			})
 			setCargando(false)
+		}
+	}
+
+	const filtrarUsuario = (e) => {
+		const valorBusqueda = e.target.value.toLowerCase()
+		if (valorBusqueda === '') {
+			setUsuarios(todosLosUsuarios)
+		} else {
+			const usuariosFiltrados = todosLosUsuarios.filter(usuario =>
+				usuario.identificacion.toLowerCase().includes(valorBusqueda) ||
+				usuario.nombres.toLowerCase().includes(valorBusqueda) ||
+				usuario.apellidos.toLowerCase().includes(valorBusqueda)
+			)
+			setUsuarios(usuariosFiltrados)
 		}
 	}
 
@@ -41,12 +66,16 @@ const Usuarios = () => {
 		setPagina(page)
 	}
 
+	const handleChange = (e) => {
+		filtrarUsuario(e)
+	}
+
 	const columnas = [
 		{
 			id: 'nombre',
 			name: 'Nombre',
 			selector: (usuario) => usuario.nombres + ' ' + usuario.apellidos,
-			grow: 2
+			grow: 2,
 		},
 		{
 			id: 'correo',
@@ -71,15 +100,22 @@ const Usuarios = () => {
 			<Navbar />
 			<Sidebar />
 			<div className='content'>
+				<input
+					type="search"
+					className='input register-input'
+					placeholder='Realice su búsqueda ...'
+					onChange={handleChange}
+				/>
 				<DataTable
 					columns={columnas}
 					data={usuarios}
+					noDataComponent='No se encontraron usuarios'
+					onChangePage={handlePageChange}
 					pagination
+					paginationDefaultPage={pagina}
+					paginationPerPage={10}
 					paginationServer
 					paginationTotalRows={totalRegistros}
-					paginationPerPage={10}
-					paginationDefaultPage={pagina}
-					onChangePage={handlePageChange}
 					progressPending={cargando}
 					responsive
 				/>
