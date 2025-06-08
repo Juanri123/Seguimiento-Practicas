@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 //Configuracion base de datos con un ORM Sequlize
 const { Sequelize } = require("sequelize");
 

@@ -168,6 +168,8 @@ const Reportes = () => {
 					paginationTotalRows={totalRegistros} // total de registros del backend
 					progressPending={!reportes.length}
 					responsive
+					noDataComponent={<div>No hay reportes disponibles</div>}
+					highlightOnHover
 				/>
 
 				{rol === 'instructor' && (
