@@ -84,12 +84,12 @@ const Reportes = () => {
 
 	const urlUploads = `${API_URL}/uploads`
 
-		const filtrarReporte = (e) => {
+	const filtrarReporte = (e) => {
 		const valorBusqueda = e.target.value.toLowerCase()
 		if (valorBusqueda === '') {
 			setReportes(todosLosReportes)
 		} else {
-			const reportesFiltrados = todosLosReportes.filter(reporte =>
+			const reportesFiltrados = todosLosReportes.filter((reporte) =>
 				reporte.nombre.toLowerCase().includes(valorBusqueda)
 			)
 			setReportes(reportesFiltrados)
@@ -106,7 +106,7 @@ const Reportes = () => {
 			<Sidebar />
 			<div className='content'>
 				<input
-					type="search"
+					type='search'
 					className='input register-input'
 					placeholder='Realice su búsqueda ...'
 					onChange={handleChange}
@@ -117,6 +117,18 @@ const Reportes = () => {
 							id: 'nombre',
 							name: 'Nombre',
 							selector: (reporte) => reporte.nombre,
+							cell: (reporte) => (
+								<div
+									title={reporte.nombre}
+									style={{
+										maxWidth: '200px',
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap'
+									}}>
+									{reporte.nombre}
+								</div>
+							),
 							sortable: true,
 							grow: 2
 						},

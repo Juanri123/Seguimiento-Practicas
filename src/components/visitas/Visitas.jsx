@@ -207,6 +207,18 @@ function Visitas() {
 							{
 								name: 'Dirección',
 								selector: (row) => row.direccion,
+								cell: (visita) => (
+									<div
+										title={visita.direccion}
+										style={{
+											maxWidth: '200px',
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap'
+										}}>
+										{visita.direccion}
+									</div>
+								),
 								sortable: true,
 								grow: 2
 							},
