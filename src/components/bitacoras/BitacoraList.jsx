@@ -6,6 +6,7 @@ import { API_URL } from '../../api/globalVars'
 
 const BitacoraList = () => {
 	const [bitacoras, setBitacoras] = useState([])
+	const [todasLasBitacoras, setTodasLasBitacoras] = useState([])
 	const [error, setError] = useState('')
 	const [rol, setRol] = useState('')
 	const [idUsuario, setIdUsuario] = useState('')
@@ -25,10 +26,13 @@ const BitacoraList = () => {
 				params
 			})
 			setBitacoras(res.data.bitacoras)
+			setTodasLasBitacoras(res.data.bitacoras)
 			setTotalPaginas(res.data.totalPaginas)
 		} catch (error) {
 			console.error('Error al obtener las bitácoras:', error.response || error)
-			setError('Error al obtener bitácoras. Consulta la consola para más detalles.')
+			setError(
+				'Error al obtener bitácoras. Consulta la consola para más detalles.'
+			)
 		}
 	}, [pagina, rol, idUsuario])
 
@@ -69,11 +73,12 @@ const BitacoraList = () => {
 
 			const idAprendiz = bitacoraRechazar.aprendiz_id
 			const claveNotificaciones = `notificaciones_${idAprendiz}`
-			const notificaciones = JSON.parse(localStorage.getItem(claveNotificaciones)) || []
+			const notificaciones =
+				JSON.parse(localStorage.getItem(claveNotificaciones)) || []
 
 			const nuevaNotificacion = {
 				id: Date.now(),
-				mensaje: `Tu bitácora fue rechazada. Motivo: ${motivoRechazo}`,
+				mensaje: `Tu bitácora fue rechazada.\nMotivo: ${motivoRechazo}`,
 				estado: 'pendiente'
 			}
 
@@ -88,17 +93,42 @@ const BitacoraList = () => {
 			setBitacoraRechazar(null)
 			obtenerBitacoras()
 		} catch (error) {
-			console.error('Error al rechazar bitácora:', error.response?.data || error)
+			console.error(
+				'Error al rechazar bitácora:',
+				error.response?.data || error
+			)
 			setMostrarMotivoPopup(false)
 			setMotivoRechazo('')
 			setBitacoraRechazar(null)
 		}
 	}
 
+	const filtrarBitacoras = (e) => {
+		const valorBusqueda = e.target.value.toLowerCase()
+		if (valorBusqueda === '') {
+			setBitacoras(todasLasBitacoras)
+			return
+		} else {
+			const bitacorasFiltradas = todasLasBitacoras.filter((bitacora) =>
+				bitacora.estado.toLowerCase().includes(valorBusqueda)
+			)
+			setBitacoras(bitacorasFiltradas)
+		}
+	}
+
+	const handleChange = (e) => {
+		filtrarBitacoras(e)
+	}
+
 	return (
 		<section className='bitacora-list'>
 			{error && <p className='error-message'>{error}</p>}
-
+			<input
+				type='search'
+				className='input register-input'
+				placeholder='Realice su búsqueda ...'
+				onChange={handleChange}
+			/>
 			<DataTable
 				columns={[
 					{
@@ -136,10 +166,14 @@ const BitacoraList = () => {
 						cell: (bitacora) =>
 							rol === 'instructor' ? (
 								<div className='bitacora-buttons'>
-									<button className='button accept' onClick={() => handleAceptar(bitacora.id)}>
+									<button
+										className='button accept'
+										onClick={() => handleAceptar(bitacora.id)}>
 										✔️
 									</button>
-									<button className='button reject' onClick={() => handleRechazar(bitacora)}>
+									<button
+										className='button reject'
+										onClick={() => handleRechazar(bitacora)}>
 										❌
 									</button>
 								</div>
