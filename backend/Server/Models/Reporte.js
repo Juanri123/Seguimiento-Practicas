@@ -7,21 +7,8 @@ const Reporte = Sequelize.define(
 		id: {
 			type: DataTypes.INTEGER.UNSIGNED,
 			autoIncrement: true,
-			primaryKey: true
-		},
-		id_usuario: {
-			type: DataTypes.INTEGER.UNSIGNED,
-			allowNull: true,
-			validate: {
-				isInt: true
-			}
-		},
-		fecha: {
-			type: DataTypes.DATEONLY,
-			allowNull: false,
-			validate: {
-				isDate: true
-			}
+			primaryKey: true,
+			allowNull: false
 		},
 		nombre: {
 			type: DataTypes.STRING(45),
@@ -31,13 +18,42 @@ const Reporte = Sequelize.define(
 			}
 		},
 		estado: {
-			type: DataTypes.STRING,
-			defaultValue: 'Pendiente'
+			type: DataTypes.STRING(20),
+			defaultValue: 'Pendiente',
+			allowNull: false,
+			validate: {
+				notEmpty: true
+			}
 		},
 		archivo: {
-			type: DataTypes.STRING,
-			allowNull: false
+			type: DataTypes.STRING(150),
+			allowNull: false,
+			validate: {
+				isUrl: true,
+				notEmpty: true
+			}
 		},
+		fecha: {
+			type: DataTypes.DATEONLY,
+			allowNull: false,
+			validate: {
+				isDate: true,
+				notEmpty: true
+			}
+		},
+		id_usuario: {
+			type: DataTypes.INTEGER.UNSIGNED,
+			allowNull: true,
+			references: {
+				model: 'usuario',
+				key: 'id'
+			},
+			validate: {
+				isInt: true,
+				min: 1,
+				notEmpty: true
+			}
+		}
 	},
 	{
 		tableName: 'reporte',
