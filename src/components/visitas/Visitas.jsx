@@ -272,7 +272,7 @@ function Visitas() {
 										</div>
 									) : (
 										<button
-											className='button register-button'
+											className='edit-button'
 											onClick={() => handleEditar(row)}>
 											Editar
 										</button>

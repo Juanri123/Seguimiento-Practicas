@@ -808,6 +808,86 @@ body {
 	align-items: center;
 	border-left: 1px solid #000;
 }
+.close-button {
+    margin-top: 10px;
+    background: #ff4d4d;
+    border: none;
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.edit-button {
+    background: #777;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.edit-button:hover {
+    background: #555;
+}
+.edit-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 6px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 350px;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.edit-form h2 {
+    font-size: 18px;
+    font-weight: 500;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.edit-form input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    background: #f9f9f9;
+}
+
+.edit-form button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.save-button {
+    background: #4CAF50;
+    color: white;
+}
+
+.save-button:hover {
+    background: #45a049;
+}
+
+.cancel-button {
+    background: #d9534f;
+    color: white;
+    margin-top: 10px;
+}
+
+.cancel-button:hover {
+    background: #c9302c;
+}
+
+
 
 /* Not Found Page */
 .not-found {
