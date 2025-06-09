@@ -22,7 +22,7 @@ const Usuarios = () => {
 				{
 					params: {
 						page: pagina,
-						limit: 10
+						limit: 9
 					}
 				}
 			)
@@ -133,9 +133,16 @@ const Usuarios = () => {
 					onChangePage={handlePageChange}
 					pagination
 					paginationDefaultPage={pagina}
-					paginationPerPage={10}
+					paginationPerPage={9}
 					paginationServer
 					paginationTotalRows={totalRegistros}
+					paginationComponentOptions={{
+						rowsPerPageText: 'Filas por página',
+						rangeSeparatorText: 'de',
+						noRowsPerPage: false,
+						selectAllRowsItem: true,
+						selectAllRowsItemText: 'Todos'
+					}}
 					progressPending={cargando}
 					responsive
 					highlightOnHover

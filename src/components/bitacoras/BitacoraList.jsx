@@ -186,6 +186,13 @@ const BitacoraList = () => {
 				pagination
 				paginationServer
 				paginationTotalRows={totalPaginas * 10}
+				paginationComponentOptions={{
+					rowsPerPageText: 'Filas por página',
+					rangeSeparatorText: 'de',
+					noRowsPerPage: false,
+					selectAllRowsItem: true,
+					selectAllRowsItemText: 'Todos'
+				}}
 				paginationPerPage={10}
 				onChangePage={(page) => setPagina(page)}
 			/>

@@ -215,6 +215,13 @@ const Fichas = () => {
 						pagination
 						paginationServer
 						paginationTotalRows={totalPaginas * 10}
+						paginationComponentOptions={{
+							rowsPerPageText: 'Filas por página',
+							rangeSeparatorText: 'de',
+							noRowsPerPage: false,
+							selectAllRowsItem: true,
+							selectAllRowsItemText: 'Todos'
+						}}
 						onChangePage={(page) => setPagina(page)}
 						progressPending={loading}
 						noDataComponent={<div>No hay fichas registradas.</div>}
