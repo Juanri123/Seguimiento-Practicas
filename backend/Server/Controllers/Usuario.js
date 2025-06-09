@@ -8,10 +8,10 @@ exports.crearUsuario = async (req, res) => {
 		const {
 			nombres,
 			apellidos,
+			identificacion,
 			correo,
 			rol,
-			contraseña,
-			identificacion,
+			clave,
 			ficha: codigoFicha
 		} = req.body
 
@@ -39,7 +39,7 @@ exports.crearUsuario = async (req, res) => {
 			if (!codigoFicha) {
 				return res
 					.status(400)
-					.json({ error: 'Código de ficha requerido para este rol' })
+					.json({ message: 'Código de ficha requerido para este rol' })
 			}
 
 			fichaExistente = await Ficha.findOne({ where: { codigo: codigoFicha } })
@@ -57,15 +57,14 @@ exports.crearUsuario = async (req, res) => {
 			apellidos,
 			correo,
 			rol,
-			// id_empresa: null,
-			contraseña: await bcrypt.hash(contraseña, 2),
+			clave: await bcrypt.hash(clave, 2),
 			identificacion,
 			ficha: fichaExistente ? fichaExistente.id : null
 		})
 
 		res.status(201).json(nuevoUsuario)
 	} catch (error) {
-		console.error('Error en el servidor:', error.message)
+		console.error('Error en el servidor:', error)
 		res.status(500).json({ error: 'Error interno del servidor' })
 	}
 }
@@ -73,17 +72,17 @@ exports.crearUsuario = async (req, res) => {
 // Obtener todos los usuarios (sin importar su rol)
 exports.obtenerUsuarios = async (req, res) => {
 	try {
-		const page = parseInt(req.query.page) || 1;
-		const limit = parseInt(req.query.limit) || 9;
-		const offset = (page - 1) * limit;
+		const page = parseInt(req.query.page) || 1
+		const limit = parseInt(req.query.limit) || 9
+		const offset = (page - 1) * limit
 
 		const { count, rows } = await Usuario.findAndCountAll({
 			limit,
 			offset
-		});
+		})
 
 		if (count === 0) {
-			return res.status(404).json({ message: 'No hay usuarios registrados' });
+			return res.status(404).json({ message: 'No hay usuarios registrados' })
 		}
 
 		return res.status(200).json({
@@ -92,12 +91,12 @@ exports.obtenerUsuarios = async (req, res) => {
 			page,
 			limit,
 			totalPages: Math.ceil(count / limit)
-		});
+		})
 	} catch (error) {
-		console.error(error);
-		return res.status(500).json({ error: error.message });
+		console.error(error)
+		return res.status(500).json({ error: error.message })
 	}
-};
+}
 
 // Obtener usuario por ID (ya sea aprendiz o instructor)
 exports.obtenerUsuarioPorId = async (req, res) => {
@@ -119,16 +118,7 @@ exports.obtenerUsuarioPorId = async (req, res) => {
 exports.actualizarUsuario = async (req, res) => {
 	try {
 		const { id } = req.params
-		let {
-			nombres,
-			apellidos,
-			correo,
-			rol,
-			id_empresa,
-			contraseña,
-			identificacion,
-			ficha
-		} = req.body
+		let { nombres, apellidos, correo, rol, identificacion, ficha } = req.body
 
 		const usuario = await Usuario.findByPk(id)
 		if (!usuario) {
@@ -156,21 +146,11 @@ exports.actualizarUsuario = async (req, res) => {
 				.json({ message: 'Modifique algún campo para actualizar.' })
 		}
 
-		// Hash de contraseña si fue enviada
-		if (contraseña && contraseña.trim() !== '') {
-			const salt = await bcrypt.genSalt(2)
-			contraseña = await bcrypt.hash(contraseña, salt)
-		} else {
-			contraseña = usuario.contraseña
-		}
-
 		await usuario.update({
 			nombres,
 			apellidos,
 			correo,
 			rol,
-			id_empresa,
-			contraseña,
 			identificacion,
 			ficha
 		})
