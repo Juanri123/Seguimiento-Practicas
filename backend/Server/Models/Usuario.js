@@ -53,7 +53,7 @@ const Usuario = Sequelize.define(
 				isIn: [['aprendiz', 'instructor']]
 			}
 		},
-		contraseña: {
+		clave: {
 			type: DataTypes.STRING(60),
 			allowNull: false,
 			validate: {

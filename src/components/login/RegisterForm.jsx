@@ -26,14 +26,12 @@ const RegisterForm = () => {
 	const [formData, setFormData] = useState({
 		nombres: '',
 		apellidos: '',
-		id_empresa: '',
 		identificacion: '',
-		ficha: null,
 		correo: '',
-		rol: 'aprendiz'
+		rol: 'aprendiz',
+		clave: '',
+		ficha: null
 	})
-
-	const [password, setPassword] = useState('') // Contraseña por separado
 
 	const handleChange = (e) => {
 		setFormData({
@@ -51,13 +49,12 @@ const RegisterForm = () => {
 		if (!/\S+@\S+\.\S+/.test(formData.correo))
 			return setError('El correo introducidono es válido.')
 
-		if (password.length < 6)
+		if (formData.clave.length < 6)
 			return setError('La contraseña debe tener al menos 6 caracteres.')
 
 		try {
 			await axios.post(`${API_URL}/api/usuarios`, {
-				...formData,
-				contraseña: password
+				...formData
 			})
 
 			Swal.fire({
@@ -71,18 +68,18 @@ const RegisterForm = () => {
 			setFormData({
 				nombres: '',
 				apellidos: '',
-				id_empresa: '',
 				identificacion: '',
-				ficha: '',
 				correo: '',
-				rol: 'aprendiz'
+				rol: 'aprendiz',
+				clave: '',
+				id_empresa: '',
+				ficha: ''
 			})
-			setPassword('')
 		} catch (err) {
+			console.log(err.response)
+
 			const message =
 				err.response?.data?.message || 'Error al registrar usuario'
-			//console.log(err.response)
-
 			Swal.fire({
 				icon: 'error',
 				title: 'Error',
@@ -129,12 +126,12 @@ const RegisterForm = () => {
 					required
 				/>
 
-				<label htmlFor='code-input' className='label register-label'>
+				<label htmlFor='ficha-input' className='label register-label'>
 					Número de ficha
 				</label>
 				<select
 					className='input register-input'
-					id='code-input'
+					id='ficha-input'
 					name='ficha'
 					onChange={handleChange}
 					required>
@@ -184,8 +181,9 @@ const RegisterForm = () => {
 					type='password'
 					id='password-input'
 					className='input register-input'
-					value={password}
-					onChange={(e) => setPassword(e.target.value)}
+					name='clave'
+					value={formData.clave}
+					onChange={handleChange}
 					placeholder='Ingrese su contraseña'
 					required
 				/>
