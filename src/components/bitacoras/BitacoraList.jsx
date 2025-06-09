@@ -213,7 +213,7 @@ const BitacoraList = () => {
 				}}
 				paginationPerPage={10}
 				onChangePage={(page) => setPagina(page)}
-				noDataComponent={<div>No hay visitas registradas.</div>}
+				noDataComponent={<div>No hay bitacoras registradas.</div>}
 			/>
 
 			{rol === "aprendiz" && (
