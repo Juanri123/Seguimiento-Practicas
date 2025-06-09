@@ -178,6 +178,13 @@ const Reportes = () => {
 					paginationPerPage={limite} // 10 elementos por página
 					paginationServer // importante para paginación controlada
 					paginationTotalRows={totalRegistros} // total de registros del backend
+					paginationComponentOptions={{
+						rowsPerPageText: 'Filas por página',
+						rangeSeparatorText: 'de',
+						noRowsPerPage: false,
+						selectAllRowsItem: true,
+						selectAllRowsItemText: 'Todos'
+					}}
 					progressPending={!reportes.length}
 					responsive
 					noDataComponent={<div>No hay reportes disponibles</div>}
