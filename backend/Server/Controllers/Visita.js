@@ -91,13 +91,6 @@ exports.verVisitas = async (req, res) => {
       ],
     });
 
-    // Log para verificar que la relación aprendiz esté cargada
-    console.log(rows.map(v => ({
-      id: v.id,
-      fecha: v.fecha,
-      aprendiz: v.aprendiz ? { nombres: v.aprendiz.nombres, apellidos: v.aprendiz.apellidos } : null
-    })));
-
     res.status(200).json({
       visitas: rows,
     });

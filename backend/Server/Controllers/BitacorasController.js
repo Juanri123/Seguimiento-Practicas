@@ -30,13 +30,6 @@ exports.getAllBitacoras = async (req, res) => {
       ],
     });
 
-    // Log para verificar que la relación aprendiz esté cargada
-    console.log(rows.map(b => ({
-      id: b.id,
-      fecha: b.fecha,
-      aprendiz: b.aprendiz ? { nombres: b.aprendiz.nombres, apellidos: b.aprendiz.apellidos } : null
-    })));
-
     const totalPaginas = Math.ceil(count / limite);
 
     res.status(200).json({

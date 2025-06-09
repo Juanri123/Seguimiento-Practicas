@@ -86,16 +86,25 @@ exports.eliminarFicha = async (req, res) => {
 
 // Obtener aprendices por código de ficha
 exports.obtenerAprendicesPorFicha = async (req, res) => {
-	const { codigo } = req.params
-	try {
-		const aprendices = await Usuario.findAll({
-			where: {
-				ficha: codigo,
-				rol: 'aprendiz'
-			}
-		})
-		res.json(aprendices)
-	} catch (error) {
-		res.status(500).json({ error: 'Error al obtener aprendices' })
-	}
-}
+    const { id } = req.params; // Recibe el ID de la ficha
+    try {
+        const ficha = await Ficha.findByPk(id, {
+            include: {
+                model: Usuario,
+                as: 'aprendices', // Usar el alias de la asociación
+                where: { rol: 'aprendiz' } // Filtrar solo aprendices
+            }
+        });
+
+        if (!ficha) {
+            return res.status(404).json({ message: "Ficha no encontrada" });
+        }
+
+        console.log("Aprendices encontrados:", ficha.aprendices);
+        res.json(ficha.aprendices.length ? ficha.aprendices : { message: "No hay aprendices registrados" });
+    } catch (error) {
+        console.error("Error al obtener aprendices:", error.message);
+        res.status(500).json({ error: "Error al obtener aprendices" });
+    }
+};
+

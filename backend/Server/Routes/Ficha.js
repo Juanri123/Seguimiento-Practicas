@@ -13,7 +13,7 @@ router.put('/:id', fichaController.actualizarFicha);
 // Eliminar una ficha por ID
 router.delete('/:id', fichaController.eliminarFicha);
 
-// Obtener aprendices de una ficha específica por código
-router.get('/:codigo/aprendices', fichaController.obtenerAprendicesPorFicha);
+router.get('/:id/aprendices', fichaController.obtenerAprendicesPorFicha);
+
 
 module.exports = router;
