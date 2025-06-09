@@ -60,8 +60,7 @@ const LoginForm = () => {
 			})
 
 			setTimeout(() => {
-				Swal.close()
-				navigate('/inicio')
+        navigate('/inicio')
 			}, 100) // Timeour para asegurarse que redirige
 		} catch (err) {
 			console.error('Error al iniciar sesión:', err)
