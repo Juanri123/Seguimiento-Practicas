@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "../../api/globalVars";
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -54,11 +55,7 @@ const ResetPassword = () => {
       return;
     }
     try {
-      const API_URL = process.env.REACT_APP_API_URL;
-
-      console.log(token, `${API_URL}/auth/reset-password/${token}`);
-
-      const response = await fetch(`${API_URL}/auth/reset-password/${token}`, {
+      const response = await fetch(`${API_URL}/api/auth/reset-password/${token}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),
@@ -67,7 +64,7 @@ const ResetPassword = () => {
       const data = await response.json();
       if (response.ok) {
         setMessage("Contraseña restablecida correctamente.");
-        setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => navigate("/"), 2000);
       } else {
         setError(data.message || "Error al restablecer la contraseña.");
       }

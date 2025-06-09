@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env' })
+require('dotenv').config(/* { path: './.env' } */)
 const Usuario = require('../Models/Usuario.js')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
@@ -43,7 +43,7 @@ const forgotPassword = async (req, res) => {
 		transporter.sendMail(mailOptions, (error, info) => {
 			if (error) {
 				console.error('Error al enviar el correo:', error)
-				return res.status(500).json({ error: 'Error al enviar el correo' })
+				return res.status(500).json({ error: 'Error al enviar el correo (error)' })
 			}
 			console.log('Correo enviado:', info.response)
 			res.json({ message: 'Correo enviado, revisa tu bandeja' })
@@ -79,7 +79,7 @@ const resetPassword = async (req, res) => {
 			return res.status(404).json({ message: 'Usuario no encontrado.' })
 		}
 
-		user.contraseña = await bcrypt.hash(password, 2)
+		user.clave = await bcrypt.hash(password, 2)
 		await user.save()
 
 		res.json({ message: 'Contraseña restablecida correctamente.' })
