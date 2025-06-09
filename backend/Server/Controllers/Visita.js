@@ -71,16 +71,44 @@ exports.verVisitaPorId = async (req, res) => {
 }
 
 exports.verVisitas = async (req, res) => {
-	try {
-		const visitas = await Visita.findAll()
-		res.status(200).json({ visitas })
-	} catch (error) {
-		console.error('Error al obtener visitas:', error) // Log del error
-		res
-			.status(500)
-			.json({ error: 'Error interno del servidor', details: error.message }) // Detalles del error
-	}
-}
+  try {
+    const { usuarioId } = req.query;
+
+    const where = {};
+    if (usuarioId) {
+      where.aprendiz_id = usuarioId;
+    }
+
+    const { count, rows } = await Visita.findAndCountAll({
+      where,
+      order: [['fecha', 'DESC']],
+      include: [
+        {
+          model: Usuario,
+          as: 'aprendiz',
+          attributes: ['id', 'nombres', 'apellidos'],
+        },
+      ],
+    });
+
+    // Log para verificar que la relación aprendiz esté cargada
+    console.log(rows.map(v => ({
+      id: v.id,
+      fecha: v.fecha,
+      aprendiz: v.aprendiz ? { nombres: v.aprendiz.nombres, apellidos: v.aprendiz.apellidos } : null
+    })));
+
+    res.status(200).json({
+      visitas: rows,
+    });
+  } catch (error) {
+    console.error('Error al obtener visitas:', error);
+    res
+      .status(500)
+      .json({ error: 'Error interno del servidor', details: error.message });
+  }
+};
+
 
 exports.actualizarVisita = async (req, res) => {
 	try {

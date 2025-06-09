@@ -2,6 +2,7 @@ const Usuario = require('./Usuario');
 const Ficha = require('./Ficha');
 const Notificacion = require('./Notificacion');
 const Bitacora = require('./Bitacora');
+const Visita = require('./Visita');
 
 // Asociación Ficha -> Usuarios
 Ficha.hasMany(Usuario, {
@@ -32,6 +33,17 @@ Usuario.hasMany(Bitacora, {
 });
 
 Bitacora.belongsTo(Usuario, {
+    foreignKey: 'aprendiz_id',
+    as: 'aprendiz',
+});
+
+// Asociación Usuario -> Visitas
+Usuario.hasMany(Visita, {
+    foreignKey: 'aprendiz_id',
+    as: 'visitas',
+});
+
+Visita.belongsTo(Usuario, {
     foreignKey: 'aprendiz_id',
     as: 'aprendiz',
 });

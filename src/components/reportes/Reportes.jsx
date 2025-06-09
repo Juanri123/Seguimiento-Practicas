@@ -105,12 +105,14 @@ const Reportes = () => {
 			<NavBar />
 			<Sidebar />
 			<div className='content'>
-				<input
-					type='search'
-					className='input register-input'
-					placeholder='Realice su búsqueda ...'
-					onChange={handleChange}
-				/>
+				{rol === "instructor" && (
+					<input
+						type='search'
+						className='input register-input'
+						placeholder='Realice su búsqueda ...'
+						onChange={handleChange}
+					/>
+				)}
 				<DataTable
 					columns={[
 						{

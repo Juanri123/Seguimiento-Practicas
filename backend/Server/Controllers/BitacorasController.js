@@ -21,7 +21,21 @@ exports.getAllBitacoras = async (req, res) => {
       offset,
       limit: limite,
       order: [['fecha', 'DESC']],
+      include: [
+        {
+          model: Usuario,
+          as: 'aprendiz',
+          attributes: ['id', 'nombres', 'apellidos'],
+        },
+      ],
     });
+
+    // Log para verificar que la relación aprendiz esté cargada
+    console.log(rows.map(b => ({
+      id: b.id,
+      fecha: b.fecha,
+      aprendiz: b.aprendiz ? { nombres: b.aprendiz.nombres, apellidos: b.aprendiz.apellidos } : null
+    })));
 
     const totalPaginas = Math.ceil(count / limite);
 
@@ -34,6 +48,7 @@ exports.getAllBitacoras = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
 // Obtener una bitácora por ID
@@ -94,6 +109,7 @@ exports.createBitacora = async (req, res) => {
     res.status(500).json({ error: 'Error interno del servidor al crear la bitácora' });
   }
 };
+
 
 // Actualizar una bitácora
 exports.updateBitacora = async (req, res) => {

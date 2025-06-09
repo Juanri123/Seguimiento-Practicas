@@ -151,9 +151,8 @@ function Visitas() {
 				JSON.parse(localStorage.getItem('notificaciones')) || []
 			const nuevaNotificacion = {
 				id: Date.now(),
-				mensaje: `Tu visita del ${
-					visitaRechazar.fecha.split('T')[0]
-				} fue rechazada. Motivo: ${motivoRechazo}`,
+				mensaje: `Tu visita del ${visitaRechazar.fecha.split('T')[0]
+					} fue rechazada. Motivo: ${motivoRechazo}`,
 				estado: 'pendiente'
 			}
 
@@ -177,14 +176,21 @@ function Visitas() {
 			setVisitas(todasLasVisitas)
 			return
 		} else {
-			const visitasFiltradas = todasLasVisitas.filter(
-				(visita) =>
-					visita.tipo.toLowerCase().includes(valorBusqueda) ||
+			const visitasFiltradas = todasLasVisitas.filter((visita) => {
+				const nombreCompleto = visita.aprendiz
+					? `${visita.aprendiz.nombres} ${visita.aprendiz.apellidos}`.toLowerCase()
+					: "";
+				visita.tipo.toLowerCase().includes(valorBusqueda) ||
 					visita.direccion.toLowerCase().includes(valorBusqueda)
-			)
+				return (
+					visita.estado?.toLowerCase().includes(valorBusqueda) ||
+					nombreCompleto.includes(valorBusqueda)
+				);
+			});
 			setVisitas(visitasFiltradas)
 		}
 	}
+
 
 	const handleChange = (e) => {
 		filtrarVisitas(e)
@@ -196,14 +202,25 @@ function Visitas() {
 			<Sidebar />
 			<div className='content'>
 				<div className='visits-section'>
-					<input
-						type='search'
-						className='input register-input'
-						placeholder='Realice su búsqueda ...'
-						onChange={handleChange}
-					/>
+					{rol === "instructor" && (
+						<input
+							type='search'
+							className='input register-input'
+							placeholder='Realice su búsqueda ...'
+							onChange={handleChange}
+						/>
+					)}
 					<DataTable
 						columns={[
+							{
+								id: "aprendiz",
+								name: "Aprendiz",
+								selector: (visita) =>
+									visita.aprendiz
+										? `${visita.aprendiz.nombres} ${visita.aprendiz.apellidos}`
+										: "N/A",
+								sortable: true,
+							},
 							{
 								name: 'Dirección',
 								selector: (row) => row.direccion,
@@ -264,8 +281,8 @@ function Visitas() {
 						]}
 						data={visitas}
 						pagination
-						paginationPerPage={8}
-						paginationRowsPerPageOptions={[8, 16, 24, 32]}
+						paginationPerPage={10}
+						paginationRowsPerPageOptions={[8, 10, 16, 24, 32]}
 						paginationComponentOptions={{
 							rowsPerPageText: 'Filas por página',
 							rangeSeparatorText: 'de',
