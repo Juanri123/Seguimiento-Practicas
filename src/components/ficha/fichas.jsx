@@ -88,6 +88,39 @@ const Fichas = () => {
         }
     };
 
+    const eliminarFicha = async (fichaId) => {
+        const confirmacion = await Swal.fire({
+            title: '¿Eliminar ficha?',
+            text: 'Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (confirmacion.isConfirmed) {
+            try {
+                await axios.delete(`${API_URL}/api/fichas/${fichaId}`);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Ficha eliminada',
+                    text: 'La ficha ha sido eliminada correctamente.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                obtenerFichas();
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al eliminar ficha',
+                    text: error.response?.data?.message || 'No se pudo eliminar la ficha',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        }
+    };
+
     return (
         <div className='container'>
             <Navbar />
@@ -142,9 +175,10 @@ const Fichas = () => {
                                         id: 'acciones',
                                         name: 'Acciones',
                                         cell: (ficha) => (
-                                            <button className='edit-button' onClick={() => iniciarEdicionFicha(ficha)}>
-                                                Editar
-                                            </button>
+                                            <>
+                                                <button className='edit-button' onClick={() => iniciarEdicionFicha(ficha)}>Editar</button>
+                                                <button className='delete-button' onClick={() => eliminarFicha(ficha.id)}>Eliminar</button>
+                                            </>
                                         ),
                                     },
                                 ]}
@@ -159,12 +193,12 @@ const Fichas = () => {
                     </>
                 ) : (
                     <>
-                        <h3 className='tittle-ficha'>Ficha {codigoFichaSeleccionada}</h3>
+                        <h2>Aprendices de la Ficha {codigoFichaSeleccionada}</h2>
                         <button className="close-button" onClick={cerrarListaAprendices}>Volver</button>
                         <DataTable
                             columns={[
-                                { id: 'nombre', name: 'Nombre', selector: (aprendiz) => aprendiz.nombres || 'N/A', sortable: true },
-                                { id: 'apellido', name: 'Apellido', selector: (aprendiz) => aprendiz.apellidos || 'N/A', sortable: true },
+                                { id: 'nombre', name: 'Nombre', selector: (aprendiz) => aprendiz.nombre || 'N/A', sortable: true },
+                                { id: 'apellido', name: 'Apellido', selector: (aprendiz) => aprendiz.apellido || 'N/A', sortable: true },
                                 { id: 'identificacion', name: 'Identificación', selector: (aprendiz) => aprendiz.identificacion || 'N/A', sortable: true },
                                 { id: 'correo', name: 'Correo', selector: (aprendiz) => aprendiz.correo || 'N/A', sortable: true },
                             ]}

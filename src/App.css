@@ -310,11 +310,14 @@ body {
 	cursor: pointer;
 	margin-right: 5px;
 }
+.marcar-leida:hover {
+	background-color: #156d44;
+}
 
 .eliminar-id {
 	margin-right: 5px;
 	margin-top: 5px;
-	background-color: #871919;
+	background-color: #b12222;
 	color: white;
 	border: none;
 	padding: 6px 12px;
@@ -324,12 +327,16 @@ body {
 .eliminar-todas-btn {
 	margin-right: 5px;
 	margin-top: 5px;
-	background-color: #871919;
+	background-color: #b12222;
 	color: white;
 	border: none;
 	padding: 6px 12px;
 	border-radius: 8px;
 	cursor: pointer;
+}
+.eliminar-id:hover,
+.eliminar-todas-btn:hover {
+	background-color: #871919;
 }
 .cerrar-popup {
 	margin-top: 15px;
@@ -826,6 +833,7 @@ body {
     font-size: 14px;
     cursor: pointer;
     transition: background 0.3s ease-in-out;
+	margin-right: 5px;
 }
 
 .edit-button:hover {
@@ -884,6 +892,21 @@ body {
 }
 
 .cancel-button:hover {
+    background: #c9302c;
+}
+
+.delete-button {
+    background: #d9534f;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+.delete-button:hover {
     background: #c9302c;
 }
 
