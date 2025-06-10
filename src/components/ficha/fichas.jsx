@@ -197,8 +197,8 @@ const Fichas = () => {
                         <button className="close-button" onClick={cerrarListaAprendices}>Volver</button>
                         <DataTable
                             columns={[
-                                { id: 'nombre', name: 'Nombre', selector: (aprendiz) => aprendiz.nombre || 'N/A', sortable: true },
-                                { id: 'apellido', name: 'Apellido', selector: (aprendiz) => aprendiz.apellido || 'N/A', sortable: true },
+                                { id: 'nombre', name: 'Nombre', selector: (aprendiz) => aprendiz.nombres || 'N/A', sortable: true },
+                                { id: 'apellido', name: 'Apellido', selector: (aprendiz) => aprendiz.apellidos || 'N/A', sortable: true },
                                 { id: 'identificacion', name: 'Identificación', selector: (aprendiz) => aprendiz.identificacion || 'N/A', sortable: true },
                                 { id: 'correo', name: 'Correo', selector: (aprendiz) => aprendiz.correo || 'N/A', sortable: true },
                             ]}
