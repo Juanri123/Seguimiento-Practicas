@@ -166,7 +166,8 @@ exports.rechazarVisita = async (req, res) => {
     visita.motivo = motivo;
     await visita.save();
 
-    const fechaFormateada = visita.fecha.toISOString().split('T')[0];
+    const fechaFormateada = new Date(visita.fecha).toISOString().split('T')[0];
+
 
     const mensaje = `Tu visita del ${fechaFormateada} fue rechazada. Motivo: ${motivo}`;
     const id_usuario = visita.aprendiz_id;

@@ -126,11 +126,9 @@ function Visitas() {
 	const confirmarRechazo = async () => {
 		try {
 			const url = `${API_URL}/api/visitas/rechazar/${visitaRechazar.id}`
-			await axios.put(
-				url,
-				{ motivo: motivoRechazo },
-				{ headers: { 'Content-Type': 'application/json' } }
-			)
+			await axios.put(url, { motivo: motivoRechazo }, {
+				headers: { 'Content-Type': 'application/json' }
+			})
 
 			if (rol === 'instructor') {
 				const notificaciones = JSON.parse(localStorage.getItem('notificaciones')) || []
@@ -191,22 +189,19 @@ function Visitas() {
 							{
 								id: 'aprendiz',
 								name: 'Aprendiz',
-								selector: (v) =>
-									v.aprendiz ? `${v.aprendiz.nombres} ${v.aprendiz.apellidos}` : 'N/A',
+								selector: (v) => v.aprendiz ? `${v.aprendiz.nombres} ${v.aprendiz.apellidos}` : 'N/A',
 								sortable: true
 							},
 							{
 								name: 'Dirección',
 								selector: (row) => row.direccion,
 								cell: (v) => (
-									<div
-										title={v.direccion}
-										style={{
-											maxWidth: '200px',
-											overflow: 'hidden',
-											textOverflow: 'ellipsis',
-											whiteSpace: 'nowrap'
-										}}>
+									<div title={v.direccion} style={{
+										maxWidth: '200px',
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+										whiteSpace: 'nowrap'
+									}}>
 										{v.direccion}
 									</div>
 								),
@@ -216,16 +211,11 @@ function Visitas() {
 							{ name: 'Tipo', selector: (v) => v.tipo, sortable: true },
 							{ name: 'Fecha', selector: (v) => v.fecha.split('T')[0], sortable: true },
 							{ name: 'Hora', selector: (v) => v.hora, sortable: true },
-							{
-								name: 'Estado',
-								selector: (v) => v.estado || 'Pendiente',
-								sortable: true
-							},
+							{ name: 'Estado', selector: (v) => v.estado || 'Pendiente', sortable: true },
 							{
 								name: 'Acciones',
 								cell: (row) => {
 									if (rol === 'instructor') {
-										if (row.estado) return null
 										return (
 											<div className='visit-buttons'>
 												<button className='visit-button accept' onClick={() => handleAceptar(row.id)}>✔️</button>
@@ -257,33 +247,10 @@ function Visitas() {
 					{showForm && (
 						<form className='visit-form' onSubmit={handleAddOrUpdateVisita}>
 							<h3>{modoEdicion ? 'Editar Visita' : 'Solicitud de Visita'}</h3>
-							<input
-								type='date'
-								name='dia'
-								className='input visit-input'
-								required
-								defaultValue={modoEdicion ? visitaEditando.fecha.split('T')[0] : ''}
-							/>
-							<input
-								type='time'
-								name='hora'
-								className='input visit-input'
-								required
-								defaultValue={modoEdicion ? visitaEditando.hora : ''}
-							/>
-							<input
-								type='text'
-								name='direccion-visita'
-								placeholder='Dirección'
-								className='input visit-input'
-								required
-								defaultValue={modoEdicion ? visitaEditando.direccion : ''}
-							/>
-							<select
-								name='tipo-visita'
-								className='input visit-input'
-								required
-								defaultValue={modoEdicion ? visitaEditando.tipo : ''}>
+							<input type='date' name='dia' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.fecha.split('T')[0] : ''} />
+							<input type='time' name='hora' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.hora : ''} />
+							<input type='text' name='direccion-visita' placeholder='Dirección' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.direccion : ''} />
+							<select name='tipo-visita' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.tipo : ''}>
 								<option value=''>Selecciona tipo</option>
 								<option value='Presencial'>Presencial</option>
 								<option value='Virtual'>Virtual</option>
