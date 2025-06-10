@@ -30,20 +30,18 @@ function Visitas() {
 		try {
 			const url = `${API_URL}/api/visitas/verVisitas`
 			const response = await axios.get(url)
-			let todasLasVisitas = response.data.visitas || []
+			let todas = response.data.visitas || []
 
 			if (rol === 'aprendiz') {
-				todasLasVisitas = todasLasVisitas.filter(
-					(v) => v.aprendiz_id === Number(usuarioId)
-				)
+				todas = todas.filter((v) => v.aprendiz_id === Number(usuarioId))
 			}
-			setVisitas(todasLasVisitas)
-			setTodasLasVisitas(todasLasVisitas)
+			setVisitas(todas)
+			setTodasLasVisitas(todas)
 		} catch (error) {
 			Swal.fire({
 				icon: 'error',
-				title: 'Error al cargar la información',
-				text: 'No se pudieron obtener las visitas. Inténtalo de nuevo más tarde.',
+				title: 'Error al cargar visitas',
+				text: 'Intenta de nuevo más tarde.',
 				toast: true,
 				position: 'center',
 				showConfirmButton: false,
@@ -76,12 +74,7 @@ function Visitas() {
 			aprendiz_id: usuarioId
 		}
 
-		if (
-			!nuevaVisita.direccion ||
-			!nuevaVisita.tipo ||
-			!nuevaVisita.fecha ||
-			!nuevaVisita.hora
-		) {
+		if (!nuevaVisita.direccion || !nuevaVisita.tipo || !nuevaVisita.fecha || !nuevaVisita.hora) {
 			alert('Completa todos los campos.')
 			return
 		}
@@ -105,10 +98,7 @@ function Visitas() {
 			setModoEdicion(false)
 			setVisitaEditando(null)
 		} catch (error) {
-			console.error(
-				'Error al crear o actualizar visita:',
-				error.response?.data || error.message
-			)
+			console.error('Error al crear o actualizar visita:', error.response?.data || error.message)
 		}
 	}
 
@@ -124,10 +114,7 @@ function Visitas() {
 			await axios.put(url)
 			await obtenerVisitas()
 		} catch (error) {
-			console.error(
-				'Error al aceptar visita:',
-				error.response?.data || error.message
-			)
+			console.error('Error al aceptar visita:', error.response?.data || error.message)
 		}
 	}
 
@@ -142,24 +129,19 @@ function Visitas() {
 			await axios.put(
 				url,
 				{ motivo: motivoRechazo },
-				{
-					headers: { 'Content-Type': 'application/json' }
+				{ headers: { 'Content-Type': 'application/json' } }
+			)
+
+			if (rol === 'instructor') {
+				const notificaciones = JSON.parse(localStorage.getItem('notificaciones')) || []
+				const nuevaNotificacion = {
+					id: Date.now(),
+					mensaje: `Tu visita del ${visitaRechazar.fecha.split('T')[0]} fue rechazada. Motivo: ${motivoRechazo}`,
+					estado: 'pendiente'
 				}
-			)
-
-			const notificaciones =
-				JSON.parse(localStorage.getItem('notificaciones')) || []
-			const nuevaNotificacion = {
-				id: Date.now(),
-				mensaje: `Tu visita del ${visitaRechazar.fecha.split('T')[0]
-					} fue rechazada. Motivo: ${motivoRechazo}`,
-				estado: 'pendiente'
+				localStorage.setItem('notificaciones', JSON.stringify([...notificaciones, nuevaNotificacion]))
+				window.dispatchEvent(new Event('nuevaNotificacion'))
 			}
-
-			localStorage.setItem(
-				'notificaciones',
-				JSON.stringify([...notificaciones, nuevaNotificacion])
-			)
 
 			setMostrarMotivoPopup(false)
 			setMotivoRechazo('')
@@ -171,29 +153,23 @@ function Visitas() {
 	}
 
 	const filtrarVisitas = (e) => {
-		const valorBusqueda = e.target.value.toLowerCase()
-		if (valorBusqueda === '') {
+		const valor = e.target.value.toLowerCase()
+		if (!valor) {
 			setVisitas(todasLasVisitas)
 			return
-		} else {
-			const visitasFiltradas = todasLasVisitas.filter((visita) => {
-				const nombreCompleto = visita.aprendiz
-					? `${visita.aprendiz.nombres} ${visita.aprendiz.apellidos}`.toLowerCase()
-					: "";
-				visita.tipo.toLowerCase().includes(valorBusqueda) ||
-					visita.direccion.toLowerCase().includes(valorBusqueda)
-				return (
-					visita.estado?.toLowerCase().includes(valorBusqueda) ||
-					nombreCompleto.includes(valorBusqueda)
-				);
-			});
-			setVisitas(visitasFiltradas)
 		}
-	}
-
-
-	const handleChange = (e) => {
-		filtrarVisitas(e)
+		const filtradas = todasLasVisitas.filter((visita) => {
+			const nombreCompleto = visita.aprendiz
+				? `${visita.aprendiz.nombres} ${visita.aprendiz.apellidos}`.toLowerCase()
+				: ''
+			return (
+				visita.tipo.toLowerCase().includes(valor) ||
+				visita.direccion.toLowerCase().includes(valor) ||
+				visita.estado?.toLowerCase().includes(valor) ||
+				nombreCompleto.includes(valor)
+			)
+		})
+		setVisitas(filtradas)
 	}
 
 	return (
@@ -202,93 +178,76 @@ function Visitas() {
 			<Sidebar />
 			<div className='content'>
 				<div className='visits-section'>
-					{rol === "instructor" && (
+					{rol === 'instructor' && (
 						<input
 							type='search'
 							className='input register-input'
-							placeholder='Realice su búsqueda ...'
-							onChange={handleChange}
+							placeholder='Buscar visita...'
+							onChange={filtrarVisitas}
 						/>
 					)}
 					<DataTable
 						columns={[
 							{
-								id: "aprendiz",
-								name: "Aprendiz",
-								selector: (visita) =>
-									visita.aprendiz
-										? `${visita.aprendiz.nombres} ${visita.aprendiz.apellidos}`
-										: "N/A",
-								sortable: true,
+								id: 'aprendiz',
+								name: 'Aprendiz',
+								selector: (v) =>
+									v.aprendiz ? `${v.aprendiz.nombres} ${v.aprendiz.apellidos}` : 'N/A',
+								sortable: true
 							},
 							{
 								name: 'Dirección',
 								selector: (row) => row.direccion,
-								cell: (visita) => (
+								cell: (v) => (
 									<div
-										title={visita.direccion}
+										title={v.direccion}
 										style={{
 											maxWidth: '200px',
 											overflow: 'hidden',
 											textOverflow: 'ellipsis',
 											whiteSpace: 'nowrap'
 										}}>
-										{visita.direccion}
+										{v.direccion}
 									</div>
 								),
 								sortable: true,
 								grow: 2
 							},
+							{ name: 'Tipo', selector: (v) => v.tipo, sortable: true },
+							{ name: 'Fecha', selector: (v) => v.fecha.split('T')[0], sortable: true },
+							{ name: 'Hora', selector: (v) => v.hora, sortable: true },
 							{
-								name: 'Tipo',
-								selector: (row) => row.tipo,
-								sortable: true
-							},
-							{
-								name: 'Fecha',
-								selector: (row) => row.fecha.split('T')[0],
-								sortable: true
-							},
-							{
-								name: 'Hora',
-								selector: (row) => row.hora,
+								name: 'Estado',
+								selector: (v) => v.estado || 'Pendiente',
 								sortable: true
 							},
 							{
 								name: 'Acciones',
-								cell: (row) =>
-									rol === 'instructor' ? (
-										<div className='visit-buttons'>
-											<button
-												className='visit-button accept'
-												onClick={() => handleAceptar(row.id)}>
-												✔️
-											</button>
-											<button
-												className='visit-button reject'
-												onClick={() => handleRechazar(row)}>
-												❌
-											</button>
-										</div>
-									) : (
-										<button
-											className='edit-button'
-											onClick={() => handleEditar(row)}>
-											Editar
-										</button>
-									)
+								cell: (row) => {
+									if (rol === 'instructor') {
+										if (row.estado) return null
+										return (
+											<div className='visit-buttons'>
+												<button className='visit-button accept' onClick={() => handleAceptar(row.id)}>✔️</button>
+												<button className='visit-button reject' onClick={() => handleRechazar(row)}>❌</button>
+											</div>
+										)
+									}
+									if (rol === 'aprendiz' && row.aprendiz_id === usuarioId) {
+										return <button className='edit-button' onClick={() => handleEditar(row)}>Editar</button>
+									}
+									return null
+								}
 							}
 						]}
 						data={visitas}
 						pagination
 						paginationPerPage={10}
-						paginationRowsPerPageOptions={[8, 10, 16, 24, 32]}
+						paginationRowsPerPageOptions={[8, 10, 16, 24]}
 						paginationComponentOptions={{
 							rowsPerPageText: 'Filas por página',
 							rangeSeparatorText: 'de',
-							noRowsPerPage: false,
-							selectAllRowsItem: true,
-							selectAllRowsItemText: 'Todos'
+							noRowsPerPage: false
 						}}
 						responsive
 						highlightOnHover
@@ -303,9 +262,7 @@ function Visitas() {
 								name='dia'
 								className='input visit-input'
 								required
-								defaultValue={
-									modoEdicion ? visitaEditando.fecha.split('T')[0] : ''
-								}
+								defaultValue={modoEdicion ? visitaEditando.fecha.split('T')[0] : ''}
 							/>
 							<input
 								type='time'
@@ -317,7 +274,7 @@ function Visitas() {
 							<input
 								type='text'
 								name='direccion-visita'
-								placeholder='Dirección de la visita'
+								placeholder='Dirección'
 								className='input visit-input'
 								required
 								defaultValue={modoEdicion ? visitaEditando.direccion : ''}
@@ -327,7 +284,7 @@ function Visitas() {
 								className='input visit-input'
 								required
 								defaultValue={modoEdicion ? visitaEditando.tipo : ''}>
-								<option value=''>Selecciona tipo de visita</option>
+								<option value=''>Selecciona tipo</option>
 								<option value='Presencial'>Presencial</option>
 								<option value='Virtual'>Virtual</option>
 							</select>
@@ -354,14 +311,8 @@ function Visitas() {
 									className='popup-textarea'
 								/>
 								<div className='popup-buttons'>
-									<button onClick={confirmarRechazo} className='popup-confirm'>
-										Confirmar
-									</button>
-									<button
-										onClick={() => setMostrarMotivoPopup(false)}
-										className='popup-cancel'>
-										Cancelar
-									</button>
+									<button onClick={confirmarRechazo} className='popup-confirm'>Confirmar</button>
+									<button onClick={() => setMostrarMotivoPopup(false)} className='popup-cancel'>Cancelar</button>
 								</div>
 							</div>
 						</div>
