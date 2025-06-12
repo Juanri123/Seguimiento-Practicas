@@ -70,7 +70,6 @@ const LoginForm = () => {
 	}
 
 	return (
-		<div className='login-section'>
 			<div className='login'>
 				<form className='login-form' onSubmit={handleSubmit}>
 					<label className='label login-label' htmlFor='login-select'>
@@ -145,7 +144,6 @@ const LoginForm = () => {
 					</button>
 				</form>
 			</div>
-		</div>
 	)
 }
 
