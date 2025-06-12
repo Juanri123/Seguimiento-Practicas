@@ -8,7 +8,5 @@ router.put('/:id', Usuario.actualizarUsuario);
 router.delete('/:id', Usuario.eliminarUsuario);
 router.get('/listarUsuarios', Usuario.obtenerUsuarios);
 router.get('/:id', Usuario.obtenerUsuarioPorId);
-// router.get('/',UsuariosController.ObtenerAprendices);
-// router.get('/', UsuariosController.ObtenerInstructores);
 
 module.exports = router;

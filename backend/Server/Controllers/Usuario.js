@@ -77,6 +77,9 @@ exports.obtenerUsuarios = async (req, res) => {
 		const offset = (page - 1) * limit
 
 		const { count, rows } = await Usuario.findAndCountAll({
+			where: {
+				rol : 'aprendiz'
+			},
 			limit,
 			offset
 		})
@@ -93,7 +96,6 @@ exports.obtenerUsuarios = async (req, res) => {
 			totalPages: Math.ceil(count / limit)
 		})
 	} catch (error) {
-		console.error(error)
 		return res.status(500).json({ error: error.message })
 	}
 }
