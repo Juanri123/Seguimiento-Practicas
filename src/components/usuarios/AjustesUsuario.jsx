@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { API_URL } from '../../api/globalVars'
 import Navbar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
+import { API_URL } from '../../api/globalVars'
 
 const AjustesUsuario = () => {
 	const [formData, setFormData] = useState({
@@ -11,7 +11,7 @@ const AjustesUsuario = () => {
 		apellidos: '',
 		identificacion: '',
 		correo: '',
-		contraseña: ''
+		rol: ''
 	})
 
 	const userId = localStorage.getItem('usuarioId')
@@ -22,7 +22,15 @@ const AjustesUsuario = () => {
 			const response = await axios.get(url)
 			setFormData(response.data)
 		} catch (error) {
-			console.log(error)
+			Swal.fire({
+				icon: 'error',
+				title: 'Error al obtener los datos',
+				text: error.response?.data?.message || 'Error al obtener los datos del usuario.',
+				toast: true,
+				position: 'bottom-left',
+				showConfirmButton: false,
+				timer: 1200
+			})
 		}
 	}
 
@@ -69,7 +77,7 @@ const AjustesUsuario = () => {
 			<Sidebar />
 			<div className='content'>
 				<div className='register-form'>
-					<h2 className=''>Ajustes de Usuario</h2>
+					<h2 className=''>Información de usuario</h2>
 					<form className='form' onSubmit={handleSubmit}>
 						<label className='label register-label' htmlFor='nombres'>
 							Nombres
@@ -123,17 +131,10 @@ const AjustesUsuario = () => {
 							onChange={handleChange}
 						/>
 
-						<label className='label register-label' htmlFor='contraseña'>
-							Nueva Contraseña
-						</label>
-						<input
-							className='input register-input'
-							type='password'
-							id='contraseña'
-							name='contraseña'
-							onChange={handleChange}
-							placeholder='••••••••'
-						/>
+						<label className='label register-label' htmlFor="rol">Rol</label>
+						<input className='input register-input' type="text"
+							value={formData.rol}
+							disabled />
 
 						<button type='submit' className='button register-button'>
 							Guardar Cambios
