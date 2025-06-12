@@ -64,7 +64,7 @@ exports.verReportePorId = async (req, res) => {
 exports.verReportes = async (req, res) => {
 	try {
 		const pagina = parseInt(req.query.pagina) || 1
-		const limite = parseInt(req.query.limite) || 6
+		const limite = parseInt(req.query.limite) || 10
 		const offset = (pagina - 1) *limite
 
 		const {count, rows} = await Reporte.findAndCountAll({

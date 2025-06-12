@@ -2,7 +2,7 @@
 const { Sequelize } = require("sequelize");
 
 //Configurar el Sequelize
-const sequelize = new Sequelize('bd_project','root','123456', {
+const sequelize = new Sequelize('bd_project','root','', {
     host: 'localhost',
     dialect: 'mysql',
     logging: false, // Los logs son mesajes que dicen que esta sucediendo
