@@ -14,7 +14,12 @@ const indexRoutes = require("./Routes/index.routes.js");
 // Importar y ejecutar asociaciones entre modelos
 require("./Models/Asociaciones");
 
+// Crear una instancia de Express
 const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hola, mundo");
+});
 
 // Conexión a la base de datos
 async function connectDB() {
@@ -33,7 +38,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// ✅ Servir archivos estáticos correctamente desde /uploads
+// Servir archivos estáticos correctamente desde /uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Rutas de API
@@ -41,6 +46,8 @@ app.use("/api", indexRoutes);
 
 // Puerto del servidor
 const port = 3000;
+
+// Iniciar el servidor
 app.listen(port, () => {
   console.log("Servidor conectado en http://localhost:" + port);
 });
