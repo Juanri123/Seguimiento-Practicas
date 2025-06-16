@@ -32,13 +32,20 @@ async function connectDB() {
 }
 connectDB();
 
-// Middleware
-app.use(cors({ origin: "http://localhost:3001" })); // Cambia si usas otro frontend
+// Middleware de CORS
+app.use(cors({
+  origin: ['https://frontend-jeff.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+}));
+app.options('*', cors()); // por si hay preflight
+
+// Middleware adicional
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Servir archivos estáticos correctamente desde /uploads
+// Servir archivos estáticos
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Rutas de API
