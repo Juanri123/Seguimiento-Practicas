@@ -22,14 +22,14 @@ exports.crearUsuario = async (req, res) => {
 			return res
 				.status(400)
 				.json({ message: 'Ya existe un usuario con ese documento.' })
-		}
+		}	// Validar que no se repita usuario por número de identifcación
 
 		const correoExistente = await Usuario.findOne({ where: { correo } })
 		if (correoExistente) {
 			return res
 				.status(400)
 				.json({ message: 'Este correo ya se encuentra registrado' })
-		}
+		}	// Validar que no se repita usuario por correo electrónico
 
 		// Solo buscar o crear ficha si el rol NO es instructor
 		let fichaExistente = null
@@ -45,6 +45,13 @@ exports.crearUsuario = async (req, res) => {
 			if (!fichaExistente) {
 				fichaExistente = await Ficha.create({ codigo: codigoFicha })
 			}
+		}
+
+		// Validar que la contraseña tenga mínimo 8 caracteres 
+		if (clave.length < 8) {
+			return res
+				.status(400)
+				.json({ message: 'La contraseña debe tener 8 caracteres como mínimo.' })
 		}
 
 		const nuevoUsuario = await Usuario.create({
