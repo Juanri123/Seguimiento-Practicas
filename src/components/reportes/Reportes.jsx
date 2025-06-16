@@ -6,6 +6,7 @@ import ReportForm from './ReportForm'
 import Sidebar from '../generales/Sidebar'
 import Swal from 'sweetalert2'
 import { API_URL } from '../../api/globalVars'
+import TrashIcon from '../../icons/TrashIcon'
 
 const Reportes = () => {
 	const [reportes, setReportes] = useState([])
@@ -159,13 +160,9 @@ const Reportes = () => {
 								rol === 'instructor' ? (
 									<div className='report-options'>
 										<button
-											className='report-list__button delete-button'
+											className='delete-button'
 											onClick={() => deleteReport(reporte.id)}>
-											<img
-												src='../assets/img/trash.png'
-												alt='Eliminar'
-												id='delete-img'
-											/>
+											<TrashIcon width={24} height={24} />
 										</button>
 									</div>
 								) : (

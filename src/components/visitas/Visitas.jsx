@@ -74,7 +74,12 @@ function Visitas() {
 			aprendiz_id: usuarioId
 		}
 
-		if (!nuevaVisita.direccion || !nuevaVisita.tipo || !nuevaVisita.fecha || !nuevaVisita.hora) {
+		if (
+			!nuevaVisita.direccion ||
+			!nuevaVisita.tipo ||
+			!nuevaVisita.fecha ||
+			!nuevaVisita.hora
+		) {
 			alert('Completa todos los campos.')
 			return
 		}
@@ -98,7 +103,10 @@ function Visitas() {
 			setModoEdicion(false)
 			setVisitaEditando(null)
 		} catch (error) {
-			console.error('Error al crear o actualizar visita:', error.response?.data || error.message)
+			console.error(
+				'Error al crear o actualizar visita:',
+				error.response?.data || error.message
+			)
 		}
 	}
 
@@ -114,7 +122,10 @@ function Visitas() {
 			await axios.put(url)
 			await obtenerVisitas()
 		} catch (error) {
-			console.error('Error al aceptar visita:', error.response?.data || error.message)
+			console.error(
+				'Error al aceptar visita:',
+				error.response?.data || error.message
+			)
 		}
 	}
 
@@ -126,18 +137,28 @@ function Visitas() {
 	const confirmarRechazo = async () => {
 		try {
 			const url = `${API_URL}/api/visitas/rechazar/${visitaRechazar.id}`
-			await axios.put(url, { motivo: motivoRechazo }, {
-				headers: { 'Content-Type': 'application/json' }
-			})
+			await axios.put(
+				url,
+				{ motivo: motivoRechazo },
+				{
+					headers: { 'Content-Type': 'application/json' }
+				}
+			)
 
 			if (rol === 'instructor') {
-				const notificaciones = JSON.parse(localStorage.getItem('notificaciones')) || []
+				const notificaciones =
+					JSON.parse(localStorage.getItem('notificaciones')) || []
 				const nuevaNotificacion = {
 					id: Date.now(),
-					mensaje: `Tu visita del ${visitaRechazar.fecha.split('T')[0]} fue rechazada. Motivo: ${motivoRechazo}`,
+					mensaje: `Tu visita del ${
+						visitaRechazar.fecha.split('T')[0]
+					} fue rechazada. Motivo: ${motivoRechazo}`,
 					estado: 'pendiente'
 				}
-				localStorage.setItem('notificaciones', JSON.stringify([...notificaciones, nuevaNotificacion]))
+				localStorage.setItem(
+					'notificaciones',
+					JSON.stringify([...notificaciones, nuevaNotificacion])
+				)
 				window.dispatchEvent(new Event('nuevaNotificacion'))
 			}
 
@@ -189,19 +210,24 @@ function Visitas() {
 							{
 								id: 'aprendiz',
 								name: 'Aprendiz',
-								selector: (v) => v.aprendiz ? `${v.aprendiz.nombres} ${v.aprendiz.apellidos}` : 'N/A',
+								selector: (v) =>
+									v.aprendiz
+										? `${v.aprendiz.nombres} ${v.aprendiz.apellidos}`
+										: 'N/A',
 								sortable: true
 							},
 							{
 								name: 'Dirección',
 								selector: (row) => row.direccion,
 								cell: (v) => (
-									<div title={v.direccion} style={{
-										maxWidth: '200px',
-										overflow: 'hidden',
-										textOverflow: 'ellipsis',
-										whiteSpace: 'nowrap'
-									}}>
+									<div
+										title={v.direccion}
+										style={{
+											maxWidth: '200px',
+											overflow: 'hidden',
+											textOverflow: 'ellipsis',
+											whiteSpace: 'nowrap'
+										}}>
 										{v.direccion}
 									</div>
 								),
@@ -209,22 +235,44 @@ function Visitas() {
 								grow: 2
 							},
 							{ name: 'Tipo', selector: (v) => v.tipo, sortable: true },
-							{ name: 'Fecha', selector: (v) => v.fecha.split('T')[0], sortable: true },
+							{
+								name: 'Fecha',
+								selector: (v) => v.fecha.split('T')[0],
+								sortable: true
+							},
 							{ name: 'Hora', selector: (v) => v.hora, sortable: true },
-							{ name: 'Estado', selector: (v) => v.estado || 'Pendiente', sortable: true },
+							{
+								name: 'Estado',
+								selector: (v) => v.estado || 'Pendiente',
+								sortable: true
+							},
 							{
 								name: 'Acciones',
 								cell: (row) => {
 									if (rol === 'instructor') {
 										return (
-											<div className='visit-buttons'>
-												<button className='visit-button accept' onClick={() => handleAceptar(row.id)}>✔️</button>
-												<button className='visit-button reject' onClick={() => handleRechazar(row)}>❌</button>
-											</div>
+											<>
+												<button
+													className='visit-button'
+													onClick={() => handleAceptar(row.id)}>
+													✔️
+												</button>
+												<button
+													className='visit-button'
+													onClick={() => handleRechazar(row)}>
+													❌
+												</button>
+											</>
 										)
 									}
 									if (rol === 'aprendiz' && row.aprendiz_id === usuarioId) {
-										return <button className='edit-button' onClick={() => handleEditar(row)}>Editar</button>
+										return (
+											<button
+												className='edit-button'
+												onClick={() => handleEditar(row)}>
+												Editar
+											</button>
+										)
 									}
 									return null
 								}
@@ -247,10 +295,35 @@ function Visitas() {
 					{showForm && (
 						<form className='visit-form' onSubmit={handleAddOrUpdateVisita}>
 							<h3>{modoEdicion ? 'Editar Visita' : 'Solicitud de Visita'}</h3>
-							<input type='date' name='dia' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.fecha.split('T')[0] : ''} />
-							<input type='time' name='hora' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.hora : ''} />
-							<input type='text' name='direccion-visita' placeholder='Dirección' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.direccion : ''} />
-							<select name='tipo-visita' className='input visit-input' required defaultValue={modoEdicion ? visitaEditando.tipo : ''}>
+							<input
+								type='date'
+								name='dia'
+								className='input visit-input'
+								required
+								defaultValue={
+									modoEdicion ? visitaEditando.fecha.split('T')[0] : ''
+								}
+							/>
+							<input
+								type='time'
+								name='hora'
+								className='input visit-input'
+								required
+								defaultValue={modoEdicion ? visitaEditando.hora : ''}
+							/>
+							<input
+								type='text'
+								name='direccion-visita'
+								placeholder='Dirección'
+								className='input visit-input'
+								required
+								defaultValue={modoEdicion ? visitaEditando.direccion : ''}
+							/>
+							<select
+								name='tipo-visita'
+								className='input visit-input'
+								required
+								defaultValue={modoEdicion ? visitaEditando.tipo : ''}>
 								<option value=''>Selecciona tipo</option>
 								<option value='Presencial'>Presencial</option>
 								<option value='Virtual'>Virtual</option>
@@ -278,8 +351,14 @@ function Visitas() {
 									className='popup-textarea'
 								/>
 								<div className='popup-buttons'>
-									<button onClick={confirmarRechazo} className='popup-confirm'>Confirmar</button>
-									<button onClick={() => setMostrarMotivoPopup(false)} className='popup-cancel'>Cancelar</button>
+									<button onClick={confirmarRechazo} className='popup-confirm'>
+										Confirmar
+									</button>
+									<button
+										onClick={() => setMostrarMotivoPopup(false)}
+										className='popup-cancel'>
+										Cancelar
+									</button>
 								</div>
 							</div>
 						</div>
