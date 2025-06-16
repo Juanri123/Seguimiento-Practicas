@@ -1,16 +1,13 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { API_URL } from '../../api/globalVars'
 
 const Content = () => {
-	const { id } = useParams() // Si el id viene de la URL
-	const [usuario, setUsuario] = useState(null) // Guardamos la información del usuario
-	const [loading, setLoading] = useState(true) // Estado de carga
-	const [error, setError] = useState(null) // Estado para errores
+	const [usuario, setUsuario] = useState(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState(null)
 
-	// En lugar de 'id' en useParams, intenta obtenerlo de localStorage
-	const userId = id || localStorage.getItem('usuarioId')
+	const userId = localStorage.getItem('usuarioId')
 
 	const obtenerUsuario = async () => {
 		try {
@@ -50,18 +47,15 @@ const Content = () => {
 				<img src='../assets/img/user.png' alt='Profile' />
 				<div>
 					<h2>Información del {usuario?.rol}</h2>
+					<b><p>Nombre:</p></b>
 					<p>{usuario?.nombres}</p>
+					<b><p>Apellidos:</p></b>
 					<p>{usuario?.apellidos}</p>
+					<b><p>Correo:</p></b>
 					<p>{usuario?.correo}</p>
+					<b><p>Identificación:</p></b>
 					<p>{usuario?.identificacion}</p>
 				</div>
-			</section>
-			<section className='pending-info-section'>
-				<h3>Información pendiente del aprendiz</h3>
-				<p>
-					Aquí va la información sobre las tareas o actividades pendientes del
-					aprendiz.
-				</p>
 			</section>
 		</>
 	)
