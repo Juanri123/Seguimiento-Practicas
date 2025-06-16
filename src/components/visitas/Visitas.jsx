@@ -109,9 +109,20 @@ function Visitas() {
 	}
 
 	const handleAceptar = async (id) => {
+
 		try {
 			const url = `${API_URL}/api/visitas/aceptar/${id}`
 			await axios.put(url)
+
+			Swal.fire({
+				position: 'center',
+				icon: 'success',
+				title: 'Visita aceptada correctamente',
+				showConfirmButton: false,
+				timer: 1200,
+				toast: true
+			})
+
 			await obtenerVisitas()
 		} catch (error) {
 			console.error('Error al aceptar visita:', error.response?.data || error.message)

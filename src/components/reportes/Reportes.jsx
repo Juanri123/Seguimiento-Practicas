@@ -57,28 +57,40 @@ const Reportes = () => {
 	}
 
 	const deleteReport = async (id) => {
-		try {
-			await axios.delete(`${API_URL}/api/reportes/${id}`)
-			Swal.fire({
-				title: 'Reporte eliminado.',
-				text: 'El reporte fue eliminado correctamente.',
-				toast: true,
-				position: 'bottom-left',
-				icon: 'success',
-				showConfirmButton: false,
-				timer: 1200
-			})
-			obtenerReportes(pagina)
-		} catch (error) {
-			Swal.fire({
-				icon: 'error',
-				title: 'Error al eliminar reporte',
-				text: 'No se pudo eliminar el reporte.',
-				toast: true,
-				timer: 1200,
-				showConfirmButton: false,
-				position: 'bottom-left'
-			})
+
+		const confirm = await Swal.fire({
+			title: '¿Eliminar el reporte?',
+			text: 'Esta acción no se puede deshacer.',
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Sí, eliminar',
+			cancelButtonText: 'Cancelar'
+		})
+
+		if (confirm.isConfirmed) {
+			try {
+				await axios.delete(`${API_URL}/api/reportes/${id}`)
+				Swal.fire({
+					title: 'Reporte eliminado.',
+					text: 'El reporte fue eliminado correctamente.',
+					toast: true,
+					position: 'bottom-left',
+					icon: 'success',
+					showConfirmButton: false,
+					timer: 1200
+				})
+				obtenerReportes(pagina)
+			} catch (error) {
+				Swal.fire({
+					icon: 'error',
+					title: 'Error al eliminar reporte',
+					text: 'No se pudo eliminar el reporte.',
+					toast: true,
+					timer: 1200,
+					showConfirmButton: false,
+					position: 'bottom-left'
+				})
+			}
 		}
 	}
 
