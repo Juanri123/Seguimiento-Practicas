@@ -22,19 +22,17 @@ exports.crearUsuario = async (req, res) => {
 			return res
 				.status(400)
 				.json({ message: 'Ya existe un usuario con ese documento.' })
-		} //verificar si el usuario ya existe (número de identificación)
+		}
 
 		const correoExistente = await Usuario.findOne({ where: { correo } })
 		if (correoExistente) {
 			return res
 				.status(400)
 				.json({ message: 'Este correo ya se encuentra registrado' })
-		} //Verificar si el usuario ya existe (correo electrónico)
-
-		// Buscar ficha por código
-		let fichaExistente = await Ficha.findOne({ where: { codigo: codigoFicha } })
+		}
 
 		// Solo buscar o crear ficha si el rol NO es instructor
+		let fichaExistente = null
 		if (rol !== 'instructor') {
 			if (!codigoFicha) {
 				return res
@@ -45,13 +43,10 @@ exports.crearUsuario = async (req, res) => {
 			fichaExistente = await Ficha.findOne({ where: { codigo: codigoFicha } })
 
 			if (!fichaExistente) {
-				fichaExistente = await Ficha.create({
-					codigo: codigoFicha
-				})
+				fichaExistente = await Ficha.create({ codigo: codigoFicha })
 			}
 		}
 
-		// Crear el usuario (con o sin ficha)
 		const nuevoUsuario = await Usuario.create({
 			nombres,
 			apellidos,
@@ -69,7 +64,7 @@ exports.crearUsuario = async (req, res) => {
 	}
 }
 
-// Obtener todos los usuarios (sin importar su rol)
+// Obtener todos los usuarios (solo aprendices aquí)
 exports.obtenerUsuarios = async (req, res) => {
 	try {
 		const page = parseInt(req.query.page) || 1
@@ -78,7 +73,7 @@ exports.obtenerUsuarios = async (req, res) => {
 
 		const { count, rows } = await Usuario.findAndCountAll({
 			where: {
-				rol : 'aprendiz'
+				rol: 'aprendiz'
 			},
 			limit,
 			offset
@@ -100,7 +95,7 @@ exports.obtenerUsuarios = async (req, res) => {
 	}
 }
 
-// Obtener usuario por ID (ya sea aprendiz o instructor)
+// Obtener usuario por ID
 exports.obtenerUsuarioPorId = async (req, res) => {
 	try {
 		const { id } = req.params
@@ -127,7 +122,6 @@ exports.actualizarUsuario = async (req, res) => {
 			return res.status(404).json({ message: 'Usuario no encontrado' })
 		}
 
-		// Función para verificar cambios reales
 		const haCambiado = (nuevo, actual) => {
 			return (
 				nuevo !== undefined &&
@@ -163,7 +157,7 @@ exports.actualizarUsuario = async (req, res) => {
 	}
 }
 
-// Eliminar (desactivar) aprendiz
+// Eliminar usuario
 exports.eliminarUsuario = async (req, res) => {
 	setTimeout(async () => {
 		try {
