@@ -3,6 +3,7 @@ import axios from "axios";
 import DataTable from "react-data-table-component";
 import BitacoraForm from "./BitacoraForm";
 import { API_URL } from "../../api/globalVars";
+import Swal from "sweetalert2";
 
 const BitacoraList = () => {
 	const [bitacoras, setBitacoras] = useState([])
@@ -50,8 +51,19 @@ const BitacoraList = () => {
 	}, [obtenerBitacoras, rol, idUsuario])
 
 	const handleAceptar = async (id) => {
+
 		try {
 			await axios.put(`${API_URL}/api/bitacoras/aceptar/${id}`);
+
+			Swal.fire({
+				position: 'center',
+				icon: 'success',
+				title: 'Visita aceptada correctamente',
+				showConfirmButton: false,
+				timer: 1200,
+				toast: true
+			})
+
 			obtenerBitacoras();
 		} catch (error) {
 			console.error('Error al aceptar bitácora:', error)
@@ -199,7 +211,7 @@ const BitacoraList = () => {
 							)
 					}
 				]}
-				
+
 				data={bitacoras}
 				pagination
 				paginationServer
