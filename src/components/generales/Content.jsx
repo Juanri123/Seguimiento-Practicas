@@ -47,14 +47,10 @@ const Content = () => {
 				<img src='../assets/img/user.png' alt='Profile' />
 				<div>
 					<h2>Información del {usuario?.rol}</h2>
-					<b><p>Nombre:</p></b>
-					<p>{usuario?.nombres}</p>
-					<b><p>Apellidos:</p></b>
-					<p>{usuario?.apellidos}</p>
-					<b><p>Correo:</p></b>
-					<p>{usuario?.correo}</p>
-					<b><p>Identificación:</p></b>
-					<p>{usuario?.identificacion}</p>
+					<p><b>Nombre: </b>{usuario?.nombres}</p>
+					<p><b>Apellidos: </b>{usuario?.apellidos}</p>
+					<p><b>Correo: </b>{usuario?.correo}</p>
+					<p><b>Identificación: </b>{usuario?.identificacion}</p>
 				</div>
 			</section>
 		</>

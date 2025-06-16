@@ -98,7 +98,7 @@ body {
 	flex-direction: column;
 	width: min(95%, 450px);
 	height: auto;
-	margin: 16% auto;
+	margin:	auto;
 	border-radius: 1rem;
 }
 
@@ -461,9 +461,6 @@ body {
 	background-color: #f8f8f8;
 	padding: 20px 30px;
 	border-radius: 0.2rem;
-}
-
-.info-section {
 	display: flex;
 	align-items: center;
 }
@@ -472,8 +469,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	flex-wrap: wrap;
-	gap: 5px;
+	gap: 10px;
 	margin-left: 20px;
+}
+
+.info-section > div > h2 {
+	margin-bottom: 20px;
 }
 
 .info-section img {
