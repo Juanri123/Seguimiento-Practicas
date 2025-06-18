@@ -18,7 +18,7 @@ require("./Models/Asociaciones");
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Hola, mundo");
+  res.send("Hola, mundo, este es mi back");
 });
 
 // Conexión a la base de datos
@@ -37,6 +37,7 @@ app.use(cors({
   // origin: ['https://frontend-jeff.vercel.app'],
   origin: ['http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 app.options('*', cors()); // por si hay preflight
