@@ -62,9 +62,7 @@
 					toast: true
 				})
 
-				setTimeout(() => {
-			navigate('/inicio')
-				}, 100) // Timeour para asegurarse que redirige
+				navigate('/inicio')
 			} catch (err) {
 				console.error('Error al iniciar sesión:', err)
 				const message = err.response?.data?.message || 'Error al iniciar sesión'
