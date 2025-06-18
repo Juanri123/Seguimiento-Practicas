@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react'
-import { API_URL } from '../../api/globalVars'
+import {useEffect, useState} from 'react'
+import {API_URL} from '../../api/globalVars'
 
 const Content = () => {
 	const [usuario, setUsuario] = useState(null)
@@ -47,12 +47,42 @@ const Content = () => {
 				<img src='../assets/img/user.png' alt='Profile' />
 				<div>
 					<h2>Información del {usuario?.rol}</h2>
-					<p><b>Nombre: </b>{usuario?.nombres}</p>
-					<p><b>Apellidos: </b>{usuario?.apellidos}</p>
-					<p><b>Correo: </b>{usuario?.correo}</p>
-					<p><b>Identificación: </b>{usuario?.identificacion}</p>
+					<p>
+						<b>Nombre: </b>
+						{usuario?.nombres}
+					</p>
+					<p>
+						<b>Apellidos: </b>
+						{usuario?.apellidos}
+					</p>
+					<p>
+						<b>Correo: </b>
+						{usuario?.correo}
+					</p>
+					<p>
+						<b>Identificación: </b>
+						{usuario?.identificacion}
+					</p>
 				</div>
 			</section>
+			{usuario.rol === 'aprendiz' ? (
+				<section className='info-section'>
+					<div>
+					<h2>
+						Actividades Pendientes
+					</h2>
+						<h4>
+							Bitacóras Subidas: <span>{0}/12</span>
+						</h4>
+						<h4>
+							Reportes Recibidos: <span>{3}</span>
+						</h4>
+						<h4>
+							Visitas Realizadas: <span>{1}/3</span>
+						</h4>
+					</div>
+				</section>
+			) : null}
 		</>
 	)
 }
