@@ -18,7 +18,7 @@ require("./Models/Asociaciones");
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Hola, mundo");
+  res.send("Hola, mundo, este es mi back");
 });
 
 // Conexión a la base de datos
