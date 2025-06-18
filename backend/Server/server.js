@@ -34,7 +34,8 @@ connectDB();
 
 // Middleware de CORS
 app.use(cors({
-  origin: ['https://frontend-jeff.vercel.app'],
+  // origin: ['https://frontend-jeff.vercel.app'],
+  origin: ['http://localhost:3001'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true
 }));
