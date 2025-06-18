@@ -33,7 +33,10 @@ const Bitacoras = sequelize.define(
 		},
 		fecha: {
 			type: DataTypes.DATEONLY,
-			allowNull: false
+			allowNull: false,
+			validate: {
+				isDate: true,
+			}
 		},
 		aprendiz_id: {
 			type: DataTypes.INTEGER.UNSIGNED,
