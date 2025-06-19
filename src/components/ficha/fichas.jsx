@@ -20,6 +20,7 @@ const Fichas = () => {
 	const [loading, setLoading] = useState(false)
 	const [editandoFicha, setEditandoFicha] = useState(null)
 	const [formData, setFormData] = useState({ codigo: '', programa: '' })
+	const [mostrandoFormularioCrear, setMostrandoFormularioCrear] = useState(false)
 
 	const obtenerFichas = useCallback(async () => {
 		setLoading(true)
@@ -42,9 +43,7 @@ const Fichas = () => {
 
 	const obtenerAprendices = async (fichaId, codigoFicha) => {
 		try {
-			const response = await axios.get(
-				`${API_URL}/api/fichas/${fichaId}/aprendices`
-			)
+			const response = await axios.get(`${API_URL}/api/fichas/${fichaId}/aprendices`)
 			setAprendices(response.data.length ? response.data : [])
 			setFichaSeleccionada(fichaId)
 			setCodigoFichaSeleccionada(codigoFicha)
@@ -82,6 +81,7 @@ const Fichas = () => {
 				showConfirmButton: false
 			})
 			setEditandoFicha(null)
+			setFormData({ codigo: '', programa: '' })
 			obtenerFichas()
 		} catch (error) {
 			Swal.fire({
@@ -127,6 +127,30 @@ const Fichas = () => {
 		}
 	}
 
+	const crearFicha = async () => {
+		try {
+			await axios.post(`${API_URL}/api/fichas`, formData)
+			Swal.fire({
+				icon: 'success',
+				title: 'Ficha creada',
+				text: 'La nueva ficha ha sido registrada exitosamente.',
+				timer: 1500,
+				showConfirmButton: false
+			})
+			setFormData({ codigo: '', programa: '' })
+			setMostrandoFormularioCrear(false)
+			obtenerFichas()
+		} catch (error) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Error al crear ficha',
+				text: error.response?.data?.message || 'No se pudo registrar la ficha',
+				timer: 1500,
+				showConfirmButton: false
+			})
+		}
+	}
+
 	return (
 		<div className='container'>
 			<Navbar />
@@ -143,20 +167,16 @@ const Fichas = () => {
 								setFichas(
 									valorBusqueda
 										? todasLasFichas.filter(
-												(f) =>
-													f.codigo
-														.toString()
-														.toLowerCase()
-														.includes(valorBusqueda) ||
-													f.programa
-														.toString()
-														.toLowerCase()
-														.includes(valorBusqueda)
-										  )
+											(f) =>
+												f.codigo.toString().toLowerCase().includes(valorBusqueda) ||
+												f.programa.toString().toLowerCase().includes(valorBusqueda)
+										)
 										: todasLasFichas
 								)
 							}}
 						/>
+
+
 
 						{editandoFicha ? (
 							<div className='edit-form'>
@@ -182,9 +202,7 @@ const Fichas = () => {
 								<button className='save-button' onClick={actualizarFicha}>
 									Guardar cambios
 								</button>
-								<button
-									className='cancel-button'
-									onClick={cancelarEdicionFicha}>
+								<button className='cancel-button' onClick={cancelarEdicionFicha}>
 									Cancelar
 								</button>
 							</div>
@@ -286,10 +304,35 @@ const Fichas = () => {
 							}}
 							responsive
 							progressPending={loading}
-							noDataComponent={<div>No hay fichas registradas.</div>}
+							noDataComponent={<div>No hay aprendices registrados.</div>}
 							highlightOnHover
 						/>
 					</>
+				)}
+				<button className='button register-button' onClick={() => setMostrandoFormularioCrear(!mostrandoFormularioCrear)}>
+					{mostrandoFormularioCrear ? 'Cancelar' : 'Crear nueva ficha'}
+				</button>
+				{mostrandoFormularioCrear && (
+					<div className='report-form'>
+						<h2>Registrar Nueva Ficha</h2>
+						<input
+							type='text'
+							name='codigo'
+							placeholder='Código de la ficha'
+							value={formData.codigo}
+							onChange={(e) => setFormData({ ...formData, codigo: e.target.value })}
+							className='input report-input'
+						/>
+						<input
+							type='text'
+							name='programa'
+							placeholder='Programa de la ficha'
+							value={formData.programa}
+							onChange={(e) => setFormData({ ...formData, programa: e.target.value })}
+							className='input report-input'
+						/>
+						<button className='button register-button' onClick={crearFicha}>Guardar ficha</button>
+					</div>
 				)}
 			</div>
 		</div>
