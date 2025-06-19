@@ -36,6 +36,7 @@ connectDB()
 // Middleware de CORS (sin modificar)
 app.use(
 	cors({
+		// origin: ['http://localhost:3001'],
 		origin: ['http://seguimiento-practicas.vercel.app'],
 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 		allowedHeaders: ['Content-Type', 'Authorization'],
