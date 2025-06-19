@@ -508,10 +508,9 @@ body {
 
 /* VISITAS */
 .visits-section {
+	width: 100%;
 	overflow-y: scroll;
 	padding: 8px 12px;
-	/* border-radius: 8px; */
-	margin-bottom: 20px;
 }
 
 .visit-button {
