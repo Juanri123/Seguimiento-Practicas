@@ -2,7 +2,7 @@
 	import { useState, useEffect } from 'react'
 	import { Link, useNavigate } from 'react-router-dom'
 	import Swal from 'sweetalert2'
-	import { API_URL } from '../../api/globalVars'
+	import { API_URL } from '../../../api/globalVars'
 
 	const LoginForm = () => {
 		const [formData, setFormData] = useState({
