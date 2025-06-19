@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 import BitacoraForm from "./BitacoraForm";
-import { API_URL } from "../../../api/globalVars";
+import { API_URL } from "../../api/globalVars";
 import Swal from "sweetalert2";
 
 const BitacoraList = () => {

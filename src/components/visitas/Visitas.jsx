@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component'
 import Swal from 'sweetalert2'
 import NavBar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
-import { API_URL } from '../../../api/globalVars'
+import { API_URL } from '../../api/globalVars'
 
 function Visitas() {
 	const [showForm, setShowForm] = useState(false)

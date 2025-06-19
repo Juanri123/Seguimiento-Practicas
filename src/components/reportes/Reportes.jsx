@@ -5,7 +5,7 @@ import NavBar from '../generales/NavBar'
 import ReportForm from './ReportForm'
 import Sidebar from '../generales/Sidebar'
 import Swal from 'sweetalert2'
-import { API_URL } from '../../../api/globalVars'
+import { API_URL } from '../../api/globalVars'
 import TrashIcon from '../../icons/TrashIcon'
 
 const Reportes = () => {

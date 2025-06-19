@@ -3,7 +3,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import Navbar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
-import { API_URL } from '../../../api/globalVars'
+import { API_URL } from '../../api/globalVars'
 
 const AjustesUsuario = () => {
 	const [formData, setFormData] = useState({

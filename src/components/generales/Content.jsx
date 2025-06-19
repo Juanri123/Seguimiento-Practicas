@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {useEffect, useState} from 'react'
-import {API_URL} from '../../../api/globalVars'
+import {API_URL} from '../../api/globalVars'
 
 const Content = () => {
 	const [usuario, setUsuario] = useState(null)
