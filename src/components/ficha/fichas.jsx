@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import DataTable from 'react-data-table-component'
 import Sidebar from '../generales/Sidebar'
 import Navbar from '../generales/NavBar'
-import { API_URL } from '../../api/globalVars'
+import { API_URL } from '../../../api/globalVars'
 import TrashIcon from '../../icons/TrashIcon'
 import EditIcon from '../../icons/EditIcon'
 

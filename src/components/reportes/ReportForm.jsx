@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { API_URL } from '../../api/globalVars'
+import { API_URL } from '../../../api/globalVars'
 
 const ReportForm = ({ onAddReporte, onClose }) => {
   const [reporte, setReporte] = useState({

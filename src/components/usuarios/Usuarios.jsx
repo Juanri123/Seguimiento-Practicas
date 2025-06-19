@@ -3,7 +3,7 @@ import axios from 'axios'
 import DataTable from 'react-data-table-component'
 import Navbar from '../generales/NavBar'
 import Sidebar from '../generales/Sidebar'
-import { API_URL } from '../../api/globalVars'
+import { API_URL } from '../../../api/globalVars'
 import Swal from 'sweetalert2'
 
 const Usuarios = () => {

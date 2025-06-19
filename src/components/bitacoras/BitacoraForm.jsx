@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react'
 import Swal from 'sweetalert2'
-import {API_URL} from '../../api/globalVars'
+import {API_URL} from '../../../api/globalVars'
 import axios from 'axios'
 
 const BitacoraForm = ({onAddBitacora, bitacoras}) => {

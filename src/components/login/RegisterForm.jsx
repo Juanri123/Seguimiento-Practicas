@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import { API_URL } from '../../api/globalVars'
+import { API_URL } from '../../../api/globalVars'
 
 const RegisterForm = () => {
 	const [fichas, setFichas] = useState([])
