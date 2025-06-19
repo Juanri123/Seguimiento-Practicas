@@ -55,24 +55,26 @@ exports.getBitacoraById = async (req, res) => {
 	}
 }
 
+// /Server/Controllers/BitacorasController.js
 exports.createBitacora = async (req, res) => {
 	try {
 		const {aprendiz_id} = req.body
 		const archivo = req.file?.filename
 		const currentDate = new Date().toISOString().split('T')[0]
 
+		console.log('REQ.BODY:', req.body)
+		console.log('REQ.FILE:', req.file)
+
 		if (!aprendiz_id || !archivo) {
 			return res.status(400).json({error: 'Faltan campos obligatorios'})
 		}
 
-		// Crear la bitácora
 		const nuevaBitacora = await Bitacoras.create({
 			aprendiz_id,
 			fecha: currentDate,
 			archivo
 		})
 
-		// Buscar aprendiz
 		const aprendiz = await Usuario.findByPk(aprendiz_id)
 		if (!aprendiz) {
 			return res.status(404).json({message: 'Aprendiz no encontrado'})
@@ -81,10 +83,8 @@ exports.createBitacora = async (req, res) => {
 		const nombreAprendiz = aprendiz.nombres
 		const apellidoAprendiz = aprendiz.apellidos
 
-		// Buscar todos los instructores
 		const instructores = await Usuario.findAll({where: {rol: 'instructor'}})
 
-		// Crear una notificación para cada instructor
 		for (const instructor of instructores) {
 			await Notificacion.create({
 				mensaje: `El aprendiz ${nombreAprendiz} ${apellidoAprendiz} ha subido una nueva bitácora`,
@@ -96,11 +96,10 @@ exports.createBitacora = async (req, res) => {
 		res.status(201).json({bitacora: nuevaBitacora})
 	} catch (error) {
 		console.error('Error al crear la bitácora:', error)
-		res
-			.status(500)
-			.json({error: 'Error interno del servidor al crear la bitácora'})
+		res.status(500).json({error: 'Error interno del servidor al crear la bitácora'})
 	}
 }
+
 
 // Actualizar una bitácora
 exports.updateBitacora = async (req, res) => {

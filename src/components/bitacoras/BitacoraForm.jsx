@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef} from 'react'
 import Swal from 'sweetalert2'
 import {API_URL} from '../../api/globalVars'
 import axios from 'axios'
@@ -6,33 +6,35 @@ import axios from 'axios'
 const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 	const [isFormVisible, setIsFormVisible] = useState(false)
 	const [error, setError] = useState('')
-	const [bitacora, setBitacora] = useState({
-		aprendiz_id: '',
-		archivo: null
-	})
+	const [bitacora, setBitacora] = useState({aprendiz_id: '', archivo: null})
 	const [rol, setRol] = useState('')
-
-	useEffect(() => {
-		if (error) {
-			const timeout = setTimeout(() => {
-				setError(null)
-			}, 2000)
-			return () => clearTimeout(timeout)
-		}
-	}, [error])
+	const fileInputRef = useRef(null)
 
 	useEffect(() => {
 		const rolGuardado = localStorage.getItem('rol')
 		const idGuardado = localStorage.getItem('usuarioId')
 		if (rolGuardado) setRol(rolGuardado.toLowerCase())
-		if (idGuardado) {
-			setBitacora((prev) => ({...prev, aprendiz_id: idGuardado}))
-		}
+		if (idGuardado) setBitacora((prev) => ({...prev, aprendiz_id: idGuardado}))
 	}, [])
+
+	useEffect(() => {
+		if (error) {
+			const timeout = setTimeout(() => setError(null), 2000)
+			return () => clearTimeout(timeout)
+		}
+	}, [error])
 
 	const toggleForm = (e) => {
 		e.preventDefault()
 		setIsFormVisible(!isFormVisible)
+	}
+
+	const handleChange = (e) => {
+		const {name, value, files} = e.target
+		setBitacora({
+			...bitacora,
+			[name]: name === 'archivo' ? files[0] : value
+		})
 	}
 
 	const handleSubmit = async (e) => {
@@ -52,40 +54,27 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 				headers: {'Content-Type': 'multipart/form-data'}
 			})
 
-			if (data && !error) {
-				Swal.fire({
-					position: 'top',
-					icon: 'success',
-					title: 'Bitácora subida exitosamente',
-					showConfirmButton: false,
-					timer: 1200,
-					toast: true
-				})
+			Swal.fire({
+				position: 'top',
+				icon: 'success',
+				title: 'Bitácora subida exitosamente',
+				showConfirmButton: false,
+				timer: 1200,
+				toast: true
+			})
 
-				setIsFormVisible(false)
-				setBitacora({
-					aprendiz_id: bitacora.aprendiz_id,
-					archivo: null
-				})
-				onAddBitacora()
-				window.dispatchEvent(new Event('notificacionesActualizadas'))
-			} else {
-				setError('Error desconocido al subir la bitácora.')
-			}
+			// Limpiar
+			setBitacora({aprendiz_id: bitacora.aprendiz_id, archivo: null})
+			if (fileInputRef.current) fileInputRef.current.value = ''
+			setIsFormVisible(false)
+			onAddBitacora()
+			window.dispatchEvent(new Event('notificacionesActualizadas'))
 		} catch (error) {
-			const errorMessage =
-				error.response?.data?.message ||
-				'Ocurrió un error al subir la bitácora.'
-			setError(errorMessage)
+			console.error('Error al subir bitácora:', error)
+			setError(
+				error.response?.data?.error || 'Ocurrió un error al subir la bitácora.'
+			)
 		}
-	}
-
-	const handleChange = (e) => {
-		const {name, value, files} = e.target
-		setBitacora({
-			...bitacora,
-			[name]: name === 'archivo' ? files[0] : value
-		})
 	}
 
 	if (rol !== 'aprendiz') return null
@@ -95,6 +84,7 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 			<button className='button register-button' onClick={toggleForm}>
 				Agregar Bitácora
 			</button>
+
 			{isFormVisible && (
 				<section className='bitacora-form'>
 					<h2 className='bitacora-form__title'>Agregar Bitácora</h2>
@@ -104,19 +94,14 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 						name='archivo'
 						className='input report-input'
 						onChange={handleChange}
+						ref={fileInputRef}
 						required
 					/>
 
 					{error && (
 						<p className='error-message' role='alert'>
-							<span role='img' aria-label='error'>
-								⚠️
-							</span>{' '}
-							{error}
-							<button
-								onClick={() => setError(null)}
-								className='close-button'
-								aria-label='cerrar alerta'>
+							⚠️ {error}
+							<button onClick={() => setError(null)} className='close-button'>
 								✖
 							</button>
 						</p>
