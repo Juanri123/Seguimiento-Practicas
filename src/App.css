@@ -738,6 +738,10 @@ body {
 	padding: 8px;
 }
 
+.datatable {
+	overflow-x: scroll;
+}
+
 .close-button {
 	margin-top: 10px;
 	background: #ff4d4d;

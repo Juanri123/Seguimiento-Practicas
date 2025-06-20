@@ -257,6 +257,7 @@ const Fichas = () => {
 								progressPending={loading}
 								noDataComponent={<div>No hay fichas registradas.</div>}
 								highlightOnHover
+								className='datatable'
 							/>
 						)}
 					</>
