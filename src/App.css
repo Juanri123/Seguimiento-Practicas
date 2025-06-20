@@ -141,29 +141,41 @@ body {
 }
 
 .error-message {
-	background-color: #d93025;
-	padding: 8px 12px;
-	display: flex;
-	align-items: center;
-	font-weight: 500;
-	font-size: 0.9rem;
-	border-radius: 8px;
-	gap: 8px;
-	color: #fff;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-	margin-top: 4px;
-	transition: opacity 0.3s ease;
-	animation: fadeIn 0.2s ease-in;
+  background-color: #d93025;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 0.9rem;
+  gap: 12px;
+  border-radius: 8px;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.error-icon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.error-text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .close-button {
-	background-color: transparent;
-	border: none;
-	color: #fff;
-	font-size: 1rem;
-	cursor: pointer;
-	margin-left: auto;
-	transition: color 0.3s ease;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  align-self: center;
+  padding: 0;
 }
 
 .close-button:hover {
