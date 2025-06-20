@@ -263,7 +263,7 @@ const Fichas = () => {
 					</>
 				) : (
 					<>
-						<h2>Aprendices de la Ficha {codigoFichaSeleccionada}</h2>
+						<h3>Aprendices de la Ficha {codigoFichaSeleccionada}</h3>
 						<button className='close-button' onClick={cerrarListaAprendices}>
 							Volver
 						</button>

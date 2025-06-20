@@ -447,6 +447,49 @@ body {
 	color: inherit;
 }
 
+.hamburger {
+  font-size: 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+  margin: 10px;
+}
+
+.topbar {
+  display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: #f5f5f5;
+    padding: 0.5rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 1100;
+  }
+}
+
 .content {
 	overflow-x: scroll;
 	display: flex;
