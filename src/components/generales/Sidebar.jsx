@@ -5,7 +5,6 @@ import ArticleIcon from '../../icons/ArticleIcon';
 import BookIcon from '../../icons/BookIcon';
 import CalendarIcon from '../../icons/CalendarIcon';
 import SettingsIcon from '../../icons/SettingsIcon';
-import './Sidebar.css'; // Asegúrate de tener los estilos
 
 const Sidebar = () => {
   const [rol, setRol] = useState(null);
