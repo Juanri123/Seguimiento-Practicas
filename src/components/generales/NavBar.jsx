@@ -8,7 +8,16 @@ import { ReactComponent as BellIcon } from '../../icons/Bell.svg'
 const Navbar = () => {
 	const [notificaciones, setNotificaciones] = useState([])
 	const [mostrarPopup, setMostrarPopup] = useState(false)
+	const [menuAbierto, setMenuAbierto] = useState(false)
+	const [rol, setRol] = useState(null)
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		const rolGuardado = localStorage.getItem('rol')
+		if (rolGuardado) {
+			setRol(rolGuardado.toLowerCase().trim())
+		}
+	}, [])
 
 	const cargarNotificaciones = async () => {
 		const usuarioId = localStorage.getItem('usuarioId')
@@ -116,12 +125,21 @@ const Navbar = () => {
 
 	return (
 		<nav className='navbar'>
-			<img
-				src='../assets/img/sena-logo-verde.png'
-				alt='Inicio'
-				className='navbar-logo'
-				draggable='false'
-			/>
+			<div className='navbar-left'>
+				<img
+					src='../assets/img/sena-logo-verde.png'
+					alt='Inicio'
+					className='navbar-logo'
+					draggable='false'
+				/>
+			</div>
+
+			<div className='navbar-toggle'>
+				<button className='menu-toggle' onClick={() => setMenuAbierto(!menuAbierto)}>
+					☰
+				</button>
+			</div>
+
 			<div className='navbar-items'>
 				<div
 					className='navbar-notifications'
@@ -141,7 +159,7 @@ const Navbar = () => {
 					onClick={handleLogout}
 				/>
 
-				<Link to={'/ajustes'} draggable='false'>
+				<Link to='/ajustes' draggable='false'>
 					<img
 						src='../assets/img/user.png'
 						alt='Usuario'
@@ -150,7 +168,7 @@ const Navbar = () => {
 					/>
 				</Link>
 
-				<Link to={'/inicio'} draggable='false'>
+				<Link to='/inicio' draggable='false'>
 					<img
 						src='../assets/img/home.png'
 						alt='Home'
@@ -159,6 +177,21 @@ const Navbar = () => {
 					/>
 				</Link>
 			</div>
+
+			{menuAbierto && (
+				<div className='mobile-dropdown'>
+					{rol === 'instructor' && (
+						<>
+							<Link className='menu-item' to='/usuarios'>Usuarios</Link>
+							<Link className='menu-item' to='/fichas'>Fichas</Link>
+						</>
+					)}
+					<Link className='menu-item' to='/bitacoras'>Bitácoras</Link>
+					<Link className='menu-item' to='/reportes'>Reportes</Link>
+					<Link className='menu-item' to='/visitas'>Visitas</Link>
+					<Link className='menu-item' to='/ajustes'>Ajustes</Link>
+				</div>
+			)}
 
 			{mostrarPopup && (
 				<div className='notification-popup'>
@@ -169,9 +202,7 @@ const Navbar = () => {
 						notificaciones.map((notificacion) => (
 							<div
 								key={notificacion.id}
-								className={`notification-item ${
-									notificacion.estado === 'pendiente' ? 'pendiente' : 'leida'
-								}`}>
+								className={`notification-item ${notificacion.estado === 'pendiente' ? 'pendiente' : 'leida'}`}>
 								<p>{notificacion.mensaje}</p>
 
 								{notificacion.estado === 'pendiente' && (
@@ -179,9 +210,7 @@ const Navbar = () => {
 										Marcar como leída
 									</button>
 								)}
-								<button
-									className='eliminar-id'
-									onClick={() => handleEliminarNotificacion(notificacion.id)}>
+								<button className='eliminar-id' onClick={() => handleEliminarNotificacion(notificacion.id)}>
 									Eliminar
 								</button>
 							</div>
@@ -189,16 +218,12 @@ const Navbar = () => {
 					)}
 
 					{notificaciones.length > 0 && (
-						<button
-							className='eliminar-todas-btn'
-							onClick={handleEliminarTodas}>
+						<button className='eliminar-todas-btn' onClick={handleEliminarTodas}>
 							Eliminar todas
 						</button>
 					)}
 
-					<button
-						onClick={() => setMostrarPopup(false)}
-						className='cerrar-popup'>
+					<button onClick={() => setMostrarPopup(false)} className='cerrar-popup'>
 						Cerrar
 					</button>
 				</div>

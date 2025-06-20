@@ -390,6 +390,52 @@ body {
 	color: white;
 }
 
+.navbar-toggle {
+	display: none;
+}
+
+.menu-toggle {
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+}
+
+.mobile-dropdown {
+	position: absolute;
+	top: 60px;
+	left: 0;
+	width: 100%;
+	background: white;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+	z-index: 999;
+}
+
+.menu-item {
+	padding: 12px 20px;
+	text-decoration: none;
+	color: #000;
+	border-bottom: 1px solid #ddd;
+	font-weight: bold;
+}
+
+.menu-item:hover {
+	background-color: #f0f0f0;
+}
+
+/* Mostrar menú hamburguesa solo en móvil */
+@media (max-width: 768px) {
+	.navbar-toggle {
+		display: block;
+	}
+
+	.navbar-items {
+		display: none;
+	}
+}
+
 /* Animación de aparición */
 @keyframes fadeIn {
 	from {
@@ -447,47 +493,11 @@ body {
 	color: inherit;
 }
 
-.hamburger {
-  font-size: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: none;
-  margin: 10px;
-}
-
-.topbar {
-  display: none;
-}
-
-/* RESPONSIVE */
+/* Ocultar sidebar en celulares */
 @media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-  }
-
-  .hamburger {
-    display: block;
-  }
-
-  .topbar {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    background-color: #f5f5f5;
-    padding: 0.5rem 1rem;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    z-index: 1100;
-  }
+	.sidebar {
+		display: none;
+	}
 }
 
 .content {
