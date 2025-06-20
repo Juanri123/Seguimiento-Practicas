@@ -448,7 +448,7 @@ body {
 }
 
 .content {
-	/* overflow-y: scroll; */
+	overflow-y: scroll;
 	display: flex;
 	flex-direction: column;
 	padding: 4px;
