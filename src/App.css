@@ -753,13 +753,15 @@ body {
 	color: white;
 	padding: 8px 12px;
 	border: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	border-radius: 8px;
 	cursor: pointer;
 	height: 40px;
 	width: auto;
 	transition: background 0.3s ease-in-out;
-	margin-right: 5px;
-}
+	}
 
 .edit-button:hover {
 	background: #555;
