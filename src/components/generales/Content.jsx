@@ -65,24 +65,6 @@ const Content = () => {
 					</p>
 				</div>
 			</section>
-			{usuario.rol === 'aprendiz' ? (
-				<section className='info-section'>
-					<div>
-					<h2>
-						Actividades Pendientes
-					</h2>
-						<h4>
-							Bitacóras Subidas: <span>{0}/12</span>
-						</h4>
-						<h4>
-							Reportes Recibidos: <span>{3}</span>
-						</h4>
-						<h4>
-							Visitas Realizadas: <span>{1}/3</span>
-						</h4>
-					</div>
-				</section>
-			) : null}
 		</>
 	)
 }
