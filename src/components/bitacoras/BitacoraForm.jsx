@@ -1,12 +1,12 @@
-import {useState, useEffect, useRef} from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Swal from 'sweetalert2'
-import {API_URL} from '../../api/globalVars'
+import { API_URL } from '../../api/globalVars'
 import axios from 'axios'
 
-const BitacoraForm = ({onAddBitacora, bitacoras}) => {
+const BitacoraForm = ({ onAddBitacora, bitacoras }) => {
 	const [isFormVisible, setIsFormVisible] = useState(false)
 	const [error, setError] = useState('')
-	const [bitacora, setBitacora] = useState({aprendiz_id: '', archivo: null})
+	const [bitacora, setBitacora] = useState({ aprendiz_id: '', archivo: null })
 	const [rol, setRol] = useState('')
 	const fileInputRef = useRef(null)
 
@@ -14,7 +14,7 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 		const rolGuardado = localStorage.getItem('rol')
 		const idGuardado = localStorage.getItem('usuarioId')
 		if (rolGuardado) setRol(rolGuardado.toLowerCase())
-		if (idGuardado) setBitacora((prev) => ({...prev, aprendiz_id: idGuardado}))
+		if (idGuardado) setBitacora((prev) => ({ ...prev, aprendiz_id: idGuardado }))
 	}, [])
 
 	useEffect(() => {
@@ -30,10 +30,10 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 	}
 
 	const handleChange = (e) => {
-		const {name, value, files} = e.target
+		const { name, files } = e.target
 		setBitacora({
 			...bitacora,
-			[name]: name === 'archivo' ? files[0] : value
+			[name]: files[0]
 		})
 	}
 
@@ -50,8 +50,10 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 			formData.append('aprendiz_id', bitacora.aprendiz_id)
 			formData.append('archivo', bitacora.archivo)
 
-			const {data} = await axios.post(`${API_URL}/api/bitacoras`, formData, {
-				headers: {'Content-Type': 'multipart/form-data'}
+			console.log('Archivo seleccionado:', bitacora.archivo)
+
+			await axios.post(`${API_URL}/api/bitacoras`, formData, {
+				headers: { 'Content-Type': 'multipart/form-data' }
 			})
 
 			Swal.fire({
@@ -63,8 +65,7 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 				toast: true
 			})
 
-			// Limpiar
-			setBitacora({aprendiz_id: bitacora.aprendiz_id, archivo: null})
+			setBitacora({ aprendiz_id: bitacora.aprendiz_id, archivo: null })
 			if (fileInputRef.current) fileInputRef.current.value = ''
 			setIsFormVisible(false)
 			onAddBitacora()
@@ -95,6 +96,7 @@ const BitacoraForm = ({onAddBitacora, bitacoras}) => {
 						className='input report-input'
 						onChange={handleChange}
 						ref={fileInputRef}
+						accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
 						required
 					/>
 
