@@ -140,18 +140,6 @@ body {
 	padding-left: 8px;
 }
 
-main {
-	margin-left: 250px; /* Espacio reservado para el sidebar */
-	transition: margin-left 0.3s ease;
-	padding: 1rem;
-}
-
-@media (max-width: 768px) {
-	main {
-		margin-left: 0; /* Quitar margen cuando no hay sidebar */
-	}
-}
-
 .error-message {
 	background-color: #d93025;
 	padding: 8px 12px;
@@ -402,74 +390,6 @@ main {
 	color: white;
 }
 
-.navbar-toggle {
-	display: none;
-}
-
-.menu-toggle {
-	background: none;
-	border: none;
-	font-size: 24px;
-	cursor: pointer;
-}
-
-.menu-desplegable {
-	position: absolute;
-	top: 60px; /* debajo del navbar */
-	right: 0;
-	background-color: #fff;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	padding: 1rem;
-	border-radius: 0 0 8px 8px;
-	display: flex;
-	flex-direction: column;
-	gap: 0.5rem;
-	z-index: 1000;
-	width: 100%; /* que ocupe todo el ancho disponible */
-}
-
-@media (max-width: 600px) {
-	.menu-desplegable button {
-		width: 100%;
-		justify-content: flex-start;
-	}
-}
-
-.mobile-dropdown {
-	position: absolute;
-	top: 60px;
-	left: 0;
-	width: 100%;
-	background: white;
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	display: flex;
-	flex-direction: column;
-	z-index: 999;
-}
-
-.menu-item {
-	padding: 12px 20px;
-	text-decoration: none;
-	color: #000;
-	border-bottom: 1px solid #ddd;
-	font-weight: bold;
-}
-
-.menu-item:hover {
-	background-color: #f0f0f0;
-}
-
-/* Mostrar menú hamburguesa solo en móvil */
-@media (max-width: 768px) {
-	.navbar-toggle {
-		display: block;
-	}
-
-	.navbar-items {
-		display: none;
-	}
-}
-
 /* Animación de aparición */
 @keyframes fadeIn {
 	from {
@@ -527,15 +447,8 @@ main {
 	color: inherit;
 }
 
-/* Ocultar sidebar en celulares */
-@media (max-width: 768px) {
-	.sidebar {
-		display: none;
-	}
-}
-
 .content {
-	overflow-x: scroll;
+	/* overflow-y: scroll; */
 	display: flex;
 	flex-direction: column;
 	padding: 4px;
@@ -825,10 +738,6 @@ main {
 	padding: 8px;
 }
 
-.datatable {
-	overflow-x: scroll;
-}
-
 .close-button {
 	margin-top: 10px;
 	background: #ff4d4d;
@@ -844,15 +753,13 @@ main {
 	color: white;
 	padding: 8px 12px;
 	border: none;
-	display: flex;
-	justify-content: center;
-	align-items: center;
 	border-radius: 8px;
 	cursor: pointer;
 	height: 40px;
 	width: auto;
 	transition: background 0.3s ease-in-out;
-	}
+	margin-right: 5px;
+}
 
 .edit-button:hover {
 	background: #555;
