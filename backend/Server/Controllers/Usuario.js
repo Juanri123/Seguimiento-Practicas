@@ -66,7 +66,6 @@ exports.crearUsuario = async (req, res) => {
 
 		res.status(201).json(nuevoUsuario)
 	} catch (error) {
-		console.error('Error en el servidor:', error)
 		res.status(500).json({ error: 'Error interno del servidor' })
 	}
 }
@@ -179,5 +178,5 @@ exports.eliminarUsuario = async (req, res) => {
 		} catch (error) {
 			res.status(500).json({ error: error.message })
 		}
-	}, 4000)
+	}, 400000)
 }

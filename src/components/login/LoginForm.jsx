@@ -64,7 +64,6 @@
 
 				navigate('/inicio')
 			} catch (err) {
-				console.error('Error al iniciar sesión:', err)
 				const message = err.response?.data?.message || 'Error al iniciar sesión'
 				setError(message)
 			}
